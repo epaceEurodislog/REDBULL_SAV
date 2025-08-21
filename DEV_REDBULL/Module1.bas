@@ -1,5 +1,4 @@
 Attribute VB_Name = "Module1"
-Attribute VB_Name = "Module1"
 Option Explicit
 
 ' Type pour définir un équipement

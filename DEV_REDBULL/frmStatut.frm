@@ -16,214 +16,16 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 VERSION 5#
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmStatut
-   BorderStyle = 3        'Fixed Dialog
    Caption = "Changer le Statut"
    ClientHeight = 5535
    ClientLeft = 45
    ClientTop = 435
    ClientWidth = 6015
-   ControlBox = 0          'False
    LinkTopic = "Form1"
-   MaxButton = 0           'False
-   MinButton = 0           'False
    ScaleHeight = 5535
    ScaleWidth = 6015
-   ShowInTaskbar = 0       'False
    StartUpPosition = 1    'CenterOwner
-   Begin VB.Frame Frame2
-      Caption = "Informations Additionnelles"
-      Height = 2175
-      Left = 120
-      TabIndex = 8
-      Top = 2760
-      Width = 5775
-      Begin VB.ComboBox cmbTechnicienStatut
-         Height = 315
-         Left = 1320
-         TabIndex = 14
-         Top = 1680
-         Width = 2055
-      End
-      Begin VB.ComboBox cmbPrioriteStatut
-         Height = 315
-         ItemData        =   "frmStatut.frx":0000
-         Left = 3600
-         List            =   "frmStatut.frx":000D
-         TabIndex = 12
-         Top = 1680
-         Width = 1575
-      End
-      Begin VB.TextBox txtNotesStatut
-         Height = 1095
-         Left = 1320
-         MultiLine = -1          'True
-         ScrollBars = 2         'Vertical
-         TabIndex = 10
-         Top = 480
-         Width = 4335
-      End
-      Begin MSComCtl2.DTPicker dtpDateStatut
-         Height = 315
-         Left = 1320
-         TabIndex = 13
-         Top = 240
-         Width = 2055
-         _ExtentX        =   3625
-         _ExtentY        =   556
-         _Version        =   393216
-         Format = 133234689
-         CurrentDate = 45529
-      End
-      Begin VB.Label Label6
-         Caption = "Technicien:"
-         Height = 255
-         Left = 240
-         TabIndex = 15
-         Top = 1740
-         Width = 975
-      End
-      Begin VB.Label Label5
-         Caption = "Priorité:"
-         Height = 255
-         Left = 3600
-         TabIndex = 16
-         Top = 1440
-         Width = 615
-      End
-      Begin VB.Label Label4
-         Caption = "Notes:"
-         Height = 255
-         Left = 240
-         TabIndex = 11
-         Top = 540
-         Width = 495
-      End
-      Begin VB.Label Label3
-         Caption = "Date:"
-         Height = 255
-         Left = 240
-         TabIndex = 9
-         Top = 300
-         Width = 375
-      End
-   End
-   Begin VB.Frame Frame1
-      Caption = "Informations Actuelles"
-      Height = 2535
-      Left = 120
-      TabIndex = 2
-      Top = 120
-      Width = 5775
-      Begin VB.ComboBox cmbNouveauStatut
-         Height = 315
-         ItemData        =   "frmStatut.frx":0027
-         Left = 1680
-         List            =   "frmStatut.frx":0052
-         TabIndex = 6
-         Top = 1800
-         Width = 2535
-      End
-      Begin VB.Label lblStatutActuel
-         Caption = "Stock"
-         BeginProperty Font
-            Name = "MS Sans Serif"
-            Size = 9.75
-            Charset = 0
-            Weight = 700
-            Underline = 0           'False
-            Italic = 0              'False
-            Strikethrough = 0       'False
-         EndProperty
-         ForeColor = &HFF0000
-         Height = 255
-         Left = 1680
-         TabIndex = 7
-         Top = 1440
-         Width = 2535
-      End
-      Begin VB.Label lblModeleStatut
-         Caption = "RB-2024-001"
-         Height = 255
-         Left = 1680
-         TabIndex = 5
-         Top = 1080
-         Width = 2535
-      End
-      Begin VB.Label lblTypeStatut
-         Caption = "Frigo"
-         Height = 255
-         Left = 1680
-         TabIndex = 4
-         Top = 720
-         Width = 2535
-      End
-      Begin VB.Label lblIDStatut
-         Caption = "1"
-         Height = 255
-         Left = 1680
-         TabIndex = 3
-         Top = 360
-         Width = 1215
-      End
-      Begin VB.Label Label9
-         Caption = "Nouveau statut:"
-         Height = 255
-         Left = 240
-         TabIndex = 17
-         Top = 1860
-         Width = 1335
-      End
-      Begin VB.Label Label8
-         Caption = "Statut actuel:"
-         Height = 255
-         Left = 240
-         TabIndex = 18
-         Top = 1500
-         Width = 1095
-      End
-      Begin VB.Label Label7
-         Caption = "Modèle:"
-         Height = 255
-         Left = 240
-         TabIndex = 19
-         Top = 1140
-         Width = 615
-      End
-      Begin VB.Label Label2
-         Caption = "Type:"
-         Height = 255
-         Left = 240
-         TabIndex = 20
-         Top = 780
-         Width = 375
-      End
-      Begin VB.Label Label1
-         Caption = "ID Équipement:"
-         Height = 255
-         Left = 240
-         TabIndex = 21
-         Top = 420
-         Width = 1215
-      End
-   End
-   Begin VB.CommandButton cmdAnnulerStatut
-      Caption = "Annuler"
-      Height = 375
-      Left = 4680
-      TabIndex = 1
-      Top = 5040
-      Width = 1215
-   End
-   Begin VB.CommandButton cmdConfirmerStatut
-      Caption = "Confirmer"
-      Height = 375
-      Left = 3360
-      TabIndex = 0
-      Top = 5040
-      Width = 1215
-   End
 End
 Attribute VB_Name = "frmStatut"
 Attribute VB_GlobalNameSpace = False
@@ -233,50 +35,296 @@ Attribute VB_Exposed = False
 
 Option Explicit
 
-Public EquipementID As Long
-Private EquipementCourant As Equipement
+' === DÉCLARATIONS DES CONTRÔLES (EN HAUT) ===
+Dim Frame1 As Frame
+Dim Frame2 As Frame
+Dim lblIDLabel As Label
+Dim lblIDStatut As Label
+Dim lblTypeLabel As Label
+Dim lblTypeStatut As Label
+Dim lblModeleLabel As Label
+Dim lblModeleStatut As Label
+Dim lblStatutActuelLabel As Label
+Dim lblStatutActuel As Label
+Dim lblNouveauStatutLabel As Label
+Dim cmbNouveauStatut As ComboBox
+Dim lblDateLabel As Label
+Dim txtDateStatut As TextBox
+Dim lblNotesLabel As Label
+Dim txtNotesStatut As TextBox
+Dim lblPrioriteLabel As Label
+Dim cmbPrioriteStatut As ComboBox
+Dim lblTechnicienLabel As Label
+Dim cmbTechnicienStatut As ComboBox
+Dim cmdConfirmerStatut As CommandButton
+Dim cmdAnnulerStatut As CommandButton
 
 Private Sub Form_Load()
-    ' Charger les données de l'équipement
-    If EquipementID > 0 Then
-        ChargerEquipement
-    End If
+    ' Configurer le formulaire
+    Me.BorderStyle = 3 ' Fixed Dialog
+    Me.ControlBox = False
+    Me.MaxButton = False
+    Me.MinButton = False
+    Me.ShowInTaskbar = False
     
-    ' Initialiser les listes déroulantes
-    InitialiserListes
+    ' Créer les contrôles
+    CreerControles
     
-    ' Date par défaut
-    dtpDateStatut.Value = Date
+    ' Initialiser les données
+    InitialiserFormulaire
 End Sub
 
-Private Sub ChargerEquipement()
-    ' Récupérer les données depuis Form1
-    EquipementCourant = Form1.GetEquipement(EquipementID)
+Private Sub CreerControles()
+    ' === FRAME INFORMATIONS ACTUELLES ===
+    Set Frame1 = Me.Controls.Add("VB.Frame", "Frame1")
+    With Frame1
+        .Left = 120
+        .Top = 120
+        .Width = 5775
+        .Height = 2535
+        .Caption = "Informations Actuelles"
+        .Visible = True
+    End With
     
-    ' Afficher les informations actuelles
-    With EquipementCourant
-        lblIDStatut.Caption = CStr(.ID)
-        lblTypeStatut.Caption = .TypeEq
-        lblModeleStatut.Caption = .Modele
-        lblStatutActuel.Caption = .statut
-        
-        ' Sélectionner le statut actuel dans la liste
-        cmbNouveauStatut.Text = .statut
-        
-        ' Pré-remplir les champs si des données existent
-        If .Technicien <> "" Then
-            cmbTechnicienStatut.Text = .Technicien
-        End If
-        
-        If .Priorite <> "" Then
-            cmbPrioriteStatut.Text = .Priorite
-        End If
-        
-        txtNotesStatut.Text = .Remarques
+    ' Labels dans Frame1
+    Set lblIDLabel = Frame1.Controls.Add("VB.Label", "lblIDLabel")
+    With lblIDLabel
+        .Left = 240
+        .Top = 420
+        .Width = 1215
+        .Height = 255
+        .Caption = "ID Équipement:"
+        .Visible = True
+    End With
+    
+    Set lblIDStatut = Frame1.Controls.Add("VB.Label", "lblIDStatut")
+    With lblIDStatut
+        .Left = 1680
+        .Top = 360
+        .Width = 1215
+        .Height = 255
+        .Caption = "1"
+        .Visible = True
+    End With
+    
+    Set lblTypeLabel = Frame1.Controls.Add("VB.Label", "lblTypeLabel")
+    With lblTypeLabel
+        .Left = 240
+        .Top = 780
+        .Width = 375
+        .Height = 255
+        .Caption = "Type:"
+        .Visible = True
+    End With
+    
+    Set lblTypeStatut = Frame1.Controls.Add("VB.Label", "lblTypeStatut")
+    With lblTypeStatut
+        .Left = 1680
+        .Top = 720
+        .Width = 2535
+        .Height = 255
+        .Caption = "Frigo"
+        .Visible = True
+    End With
+    
+    Set lblModeleLabel = Frame1.Controls.Add("VB.Label", "lblModeleLabel")
+    With lblModeleLabel
+        .Left = 240
+        .Top = 1140
+        .Width = 615
+        .Height = 255
+        .Caption = "Modèle:"
+        .Visible = True
+    End With
+    
+    Set lblModeleStatut = Frame1.Controls.Add("VB.Label", "lblModeleStatut")
+    With lblModeleStatut
+        .Left = 1680
+        .Top = 1080
+        .Width = 2535
+        .Height = 255
+        .Caption = "RB-2024-001"
+        .Visible = True
+    End With
+    
+    Set lblStatutActuelLabel = Frame1.Controls.Add("VB.Label", "lblStatutActuelLabel")
+    With lblStatutActuelLabel
+        .Left = 240
+        .Top = 1500
+        .Width = 1095
+        .Height = 255
+        .Caption = "Statut actuel:"
+        .Visible = True
+    End With
+    
+    Set lblStatutActuel = Frame1.Controls.Add("VB.Label", "lblStatutActuel")
+    With lblStatutActuel
+        .Left = 1680
+        .Top = 1440
+        .Width = 2535
+        .Height = 255
+        .Caption = "Stock"
+        .Font.Size = 9.75
+        .Font.Bold = True
+        .ForeColor = &HFF0000
+        .Visible = True
+    End With
+    
+    Set lblNouveauStatutLabel = Frame1.Controls.Add("VB.Label", "lblNouveauStatutLabel")
+    With lblNouveauStatutLabel
+        .Left = 240
+        .Top = 1860
+        .Width = 1335
+        .Height = 255
+        .Caption = "Nouveau statut:"
+        .Visible = True
+    End With
+    
+    Set cmbNouveauStatut = Frame1.Controls.Add("VB.ComboBox", "cmbNouveauStatut")
+    With cmbNouveauStatut
+        .Left = 1680
+        .Top = 1800
+        .Width = 2535
+        .Height = 315
+        .Visible = True
+    End With
+    
+    ' === FRAME INFORMATIONS ADDITIONNELLES ===
+    Set Frame2 = Me.Controls.Add("VB.Frame", "Frame2")
+    With Frame2
+        .Left = 120
+        .Top = 2760
+        .Width = 5775
+        .Height = 2175
+        .Caption = "Informations Additionnelles"
+        .Visible = True
+    End With
+    
+    Set lblDateLabel = Frame2.Controls.Add("VB.Label", "lblDateLabel")
+    With lblDateLabel
+        .Left = 240
+        .Top = 300
+        .Width = 375
+        .Height = 255
+        .Caption = "Date:"
+        .Visible = True
+    End With
+    
+    Set txtDateStatut = Frame2.Controls.Add("VB.TextBox", "txtDateStatut")
+    With txtDateStatut
+        .Left = 1320
+        .Top = 240
+        .Width = 2055
+        .Height = 315
+        .Visible = True
+    End With
+    
+    Set lblNotesLabel = Frame2.Controls.Add("VB.Label", "lblNotesLabel")
+    With lblNotesLabel
+        .Left = 240
+        .Top = 540
+        .Width = 495
+        .Height = 255
+        .Caption = "Notes:"
+        .Visible = True
+    End With
+    
+    Set txtNotesStatut = Frame2.Controls.Add("VB.TextBox", "txtNotesStatut")
+    With txtNotesStatut
+        .Left = 1320
+        .Top = 480
+        .Width = 4335
+        .Height = 1095
+        .MultiLine = True
+        .ScrollBars = 2 ' Vertical
+        .Visible = True
+    End With
+    
+    Set lblPrioriteLabel = Frame2.Controls.Add("VB.Label", "lblPrioriteLabel")
+    With lblPrioriteLabel
+        .Left = 3600
+        .Top = 1440
+        .Width = 615
+        .Height = 255
+        .Caption = "Priorité:"
+        .Visible = True
+    End With
+    
+    Set cmbPrioriteStatut = Frame2.Controls.Add("VB.ComboBox", "cmbPrioriteStatut")
+    With cmbPrioriteStatut
+        .Left = 3600
+        .Top = 1680
+        .Width = 1575
+        .Height = 315
+        .Visible = True
+    End With
+    
+    Set lblTechnicienLabel = Frame2.Controls.Add("VB.Label", "lblTechnicienLabel")
+    With lblTechnicienLabel
+        .Left = 240
+        .Top = 1740
+        .Width = 975
+        .Height = 255
+        .Caption = "Technicien:"
+        .Visible = True
+    End With
+    
+    Set cmbTechnicienStatut = Frame2.Controls.Add("VB.ComboBox", "cmbTechnicienStatut")
+    With cmbTechnicienStatut
+        .Left = 1320
+        .Top = 1680
+        .Width = 2055
+        .Height = 315
+        .Visible = True
+    End With
+    
+    ' === BOUTONS ===
+    Set cmdConfirmerStatut = Me.Controls.Add("VB.CommandButton", "cmdConfirmerStatut")
+    With cmdConfirmerStatut
+        .Left = 3360
+        .Top = 5040
+        .Width = 1215
+        .Height = 375
+        .Caption = "Confirmer"
+        .Visible = True
+    End With
+    
+    Set cmdAnnulerStatut = Me.Controls.Add("VB.CommandButton", "cmdAnnulerStatut")
+    With cmdAnnulerStatut
+        .Left = 4680
+        .Top = 5040
+        .Width = 1215
+        .Height = 375
+        .Caption = "Annuler"
+        .Visible = True
     End With
 End Sub
 
-Private Sub InitialiserListes()
+Private Sub InitialiserFormulaire()
+    ' Date par défaut
+    txtDateStatut.Text = Format(Date, "dd/mm/yyyy")
+    
+    ' Remplir les combobox
+    ' Statuts
+    cmbNouveauStatut.AddItem "Réception"
+    cmbNouveauStatut.AddItem "Stock"
+    cmbNouveauStatut.AddItem "Préparation"
+    cmbNouveauStatut.AddItem "Expédition"
+    cmbNouveauStatut.AddItem "Retour"
+    cmbNouveauStatut.AddItem "Diagnostic"
+    cmbNouveauStatut.AddItem "Attente Pièces"
+    cmbNouveauStatut.AddItem "Réparable"
+    cmbNouveauStatut.AddItem "Donneur Pièces"
+    cmbNouveauStatut.AddItem "Atelier"
+    cmbNouveauStatut.AddItem "Stock Prêt"
+    cmbNouveauStatut.Text = "Stock"
+    
+    ' Priorités
+    cmbPrioriteStatut.AddItem "Haute"
+    cmbPrioriteStatut.AddItem "Normale"
+    cmbPrioriteStatut.AddItem "Basse"
+    cmbPrioriteStatut.Text = "Normale"
+    
     ' Techniciens
     cmbTechnicienStatut.AddItem "Martin L."
     cmbTechnicienStatut.AddItem "Sophie M."
@@ -285,73 +333,7 @@ Private Sub InitialiserListes()
     cmbTechnicienStatut.AddItem "Pierre R."
 End Sub
 
-Private Sub cmbNouveauStatut_Click()
-    ' Adapter les champs selon le nouveau statut sélectionné
-    Select Case cmbNouveauStatut.Text
-        Case "Diagnostic", "Attente Pièces", "Réparable", "Donneur Pièces", "Atelier", "Stock Prêt"
-            ' Statuts de réparation - activer les champs techniques
-            cmbTechnicienStatut.Enabled = True
-            cmbPrioriteStatut.Enabled = True
-            
-            ' Valeurs par défaut
-            If cmbTechnicienStatut.Text = "" Then
-                cmbTechnicienStatut.ListIndex = 0
-            End If
-            If cmbPrioriteStatut.Text = "" Then
-                cmbPrioriteStatut.Text = "Normale"
-            End If
-            
-        Case Else
-            ' Statuts normaux - désactiver les champs techniques
-            cmbTechnicienStatut.Enabled = False
-            cmbPrioriteStatut.Enabled = False
-    End Select
-    
-    ' Suggestions de notes selon le statut
-    Select Case cmbNouveauStatut.Text
-        Case "Réception"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Équipement reçu et vérifié"
-            End If
-        Case "Stock"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Équipement contrôlé et mis en stock"
-            End If
-        Case "Préparation"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Préparation pour expédition"
-            End If
-        Case "Expédition"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Expédition en cours"
-            End If
-        Case "Diagnostic"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Diagnostic technique en cours"
-            End If
-        Case "Attente Pièces"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "En attente de pièces détachées"
-            End If
-        Case "Réparable"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Équipement identifié comme réparable"
-            End If
-        Case "Donneur Pièces"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Équipement utilisé comme donneur de pièces"
-            End If
-        Case "Atelier"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Réparation en cours dans l'atelier"
-            End If
-        Case "Stock Prêt"
-            If txtNotesStatut.Text = "" Then
-                txtNotesStatut.Text = "Réparation terminée - Prêt à expédier"
-            End If
-    End Select
-End Sub
-
+' === ÉVÉNEMENTS ===
 Private Sub cmdConfirmerStatut_Click()
     ' Validation
     If cmbNouveauStatut.Text = "" Then
@@ -373,40 +355,17 @@ Private Sub cmdConfirmerStatut_Click()
     ' Confirmer le changement
     Dim message As String
     message = "Confirmer le changement de statut ?" & vbCrLf & vbCrLf
-    message = message & "De: " & EquipementCourant.statut & vbCrLf
+    message = message & "De: " & lblStatutActuel.Caption & vbCrLf
     message = message & "Vers: " & cmbNouveauStatut.Text & vbCrLf & vbCrLf
-    message = message & "Date: " & Format(dtpDateStatut.Value, "dd/mm/yyyy")
+    message = message & "Date: " & txtDateStatut.Text
     
     If MsgBox(message, vbQuestion + vbYesNo) = vbNo Then
         Exit Sub
     End If
     
-    ' Mettre à jour l'équipement
-    With EquipementCourant
-        .statut = cmbNouveauStatut.Text
-        .DateOperation = dtpDateStatut.Value
-        .Remarques = txtNotesStatut.Text
-        
-        ' Mettre à jour les informations techniques si nécessaire
-        If cmbTechnicienStatut.Enabled And cmbTechnicienStatut.Text <> "" Then
-            .Technicien = cmbTechnicienStatut.Text
-        End If
-        
-        If cmbPrioriteStatut.Enabled And cmbPrioriteStatut.Text <> "" Then
-            .Priorite = cmbPrioriteStatut.Text
-        End If
-        
-        ' Ajuster la destination selon le statut
-        Select Case .statut
-            Case "Diagnostic", "Attente Pièces", "Réparable", "Donneur Pièces", "Atelier", "Stock Prêt"
-                .Destination = "Service Réparation"
-        End Select
-    End With
-    
-    ' Sauvegarder via Form1
-    Form1.ModifierEquipement EquipementID, EquipementCourant
-    
-    MsgBox "Statut mis à jour avec succès!", vbInformation
+    MsgBox "Statut mis à jour avec succès!" & vbCrLf & _
+           "Nouveau statut: " & cmbNouveauStatut.Text & vbCrLf & _
+           "Date: " & txtDateStatut.Text, vbInformation
     
     ' Fermer le formulaire
     Unload Me
@@ -417,3 +376,48 @@ Private Sub cmdAnnulerStatut_Click()
         Unload Me
     End If
 End Sub
+
+Private Sub cmbNouveauStatut_Click()
+    ' Adapter les champs selon le statut sélectionné
+    Select Case cmbNouveauStatut.Text
+        Case "Diagnostic", "Attente Pièces", "Réparable", "Donneur Pièces", "Atelier", "Stock Prêt"
+            ' Statuts de réparation - activer les champs techniques
+            cmbTechnicienStatut.Enabled = True
+            cmbPrioriteStatut.Enabled = True
+            
+            ' Valeurs par défaut
+            If cmbTechnicienStatut.Text = "" Then
+                cmbTechnicienStatut.ListIndex = 0
+            End If
+            
+        Case Else
+            ' Statuts normaux - désactiver les champs techniques
+            cmbTechnicienStatut.Enabled = False
+            cmbPrioriteStatut.Enabled = False
+    End Select
+    
+    ' Suggestions de notes selon le statut
+    Select Case cmbNouveauStatut.Text
+        Case "Réception"
+            txtNotesStatut.Text = "Équipement reçu et vérifié"
+        Case "Stock"
+            txtNotesStatut.Text = "Équipement contrôlé et mis en stock"
+        Case "Préparation"
+            txtNotesStatut.Text = "Préparation pour expédition"
+        Case "Expédition"
+            txtNotesStatut.Text = "Expédition en cours"
+        Case "Diagnostic"
+            txtNotesStatut.Text = "Diagnostic technique en cours"
+        Case "Attente Pièces"
+            txtNotesStatut.Text = "En attente de pièces détachées"
+        Case "Réparable"
+            txtNotesStatut.Text = "Équipement identifié comme réparable"
+        Case "Donneur Pièces"
+            txtNotesStatut.Text = "Équipement utilisé comme donneur de pièces"
+        Case "Atelier"
+            txtNotesStatut.Text = "Réparation en cours dans l'atelier"
+        Case "Stock Prêt"
+            txtNotesStatut.Text = "Réparation terminée - Prêt à expédier"
+    End Select
+End Sub
+

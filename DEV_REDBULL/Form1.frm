@@ -1,13 +1,13 @@
 VERSION 5.00
 Begin VB.Form frmPrincipal 
    Caption         =   "Form1"
-   ClientHeight    =   3135
+   ClientHeight    =   3270
    ClientLeft      =   60
    ClientTop       =   405
-   ClientWidth     =   4680
+   ClientWidth     =   3495
    LinkTopic       =   "Form1"
-   ScaleHeight     =   3135
-   ScaleWidth      =   4680
+   ScaleHeight     =   3270
+   ScaleWidth      =   3495
    StartUpPosition =   3  'Windows Default
 End
 Attribute VB_Name = "frmPrincipal"
@@ -15,354 +15,416 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Option Explicit
-
 Private Sub Form_Load()
-    ' Configurer le formulaire
-    Me.Caption = "SAV Red Bull Scanner Pro - v2.1 - [frmPrincipal.frm]"
-    Me.BorderStyle = 1 ' Fixed Single
-    Me.MaxButton = False
-    Me.StartUpPosition = 2 ' CenterScreen
-    Me.BackColor = &HF0F0F0
-    Me.Width = 11415
-    Me.Height = 9030
+    ' Configuration de l'apparence du formulaire
+    Me.BackColor = RGB(240, 240, 240)
+    Me.Caption = "SAV Red Bull"
+    Me.Width = 12000
+    Me.Height = 9000
     
-    ' Créer les contrôles
-    CreerControles
+    ' Centrer le formulaire
+    Me.Left = (Screen.Width - Me.Width) / 2
+    Me.Top = (Screen.Height - Me.Height) / 2
     
-    ' Initialiser les valeurs
-    InitialiserFormulaire
+    ' Créer l'interface
+    CreerInterface
 End Sub
 
-Private Sub CreerControles()
-    ' Cette fonction crée tous les contrôles dynamiquement
+Private Sub CreerInterface()
+    Dim ctrl As Object
     
-    ' === TITRE ===
-    Set lblTitre = Me.Controls.Add("VB.Label", "lblTitre")
-    With lblTitre
-        .Left = 240
-        .Top = 240
-        .Width = 9255
-        .Height = 375
-        .Caption = "FICHE RETOUR SAV RED BULL"
-        .Alignment = 2 ' Center
-        .BackColor = &H4080FF
-        .ForeColor = &HFFFFFF
-        .Font.Size = 12
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' Titre principal
+    Set ctrl = Me.Controls.Add("VB.Label", "lblTitre")
+    ctrl.Left = 240
+    ctrl.Top = 120
+    ctrl.Width = 8295
+    ctrl.Height = 375
+    ctrl.Caption = "FICHE RETOUR SAV RED BULL"
+    ctrl.BackColor = RGB(51, 102, 255)
+    ctrl.ForeColor = RGB(255, 255, 255)
+    ctrl.Font.Size = 14
+    ctrl.Font.Bold = True
+    ctrl.Alignment = 2
+    ctrl.Visible = True
     
-    ' === SOUS-TITRE ===
-    Set lblSousTitre = Me.Controls.Add("VB.Label", "lblSousTitre")
-    With lblSousTitre
-        .Left = 240
-        .Top = 600
-        .Width = 9255
-        .Height = 255
-        .Caption = "Système de Gestion des Réfrigérateurs - Interface Frigoriste"
-        .Alignment = 2 ' Center
-        .BackColor = &H4080FF
-        .ForeColor = &HFFFFFF
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' Sous-titre
+    Set ctrl = Me.Controls.Add("VB.Label", "lblSousTitre")
+    ctrl.Left = 240
+    ctrl.Top = 480
+    ctrl.Width = 8295
+    ctrl.Height = 255
+    ctrl.Caption = "Système de Gestion des Réfrigérateurs - Interface Frigoriste"
+    ctrl.BackColor = RGB(51, 102, 255)
+    ctrl.ForeColor = RGB(255, 255, 255)
+    ctrl.Font.Size = 10
+    ctrl.Alignment = 2
+    ctrl.Visible = True
     
-    ' === BOUTONS ===
-    Set cmdScanner = Me.Controls.Add("VB.CommandButton", "cmdScanner")
-    With cmdScanner
-        .Left = 4440
-        .Top = 840
-        .Width = 1575
-        .Height = 735
-        .Caption = "Scanner"
-        .Visible = True
-    End With
+    ' Bouton Scanner
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdScanner")
+    ctrl.Left = 480
+    ctrl.Top = 840
+    ctrl.Width = 1575
+    ctrl.Height = 495
+    ctrl.Caption = "Scanner"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set cmdFormulaire = Me.Controls.Add("VB.CommandButton", "cmdFormulaire")
-    With cmdFormulaire
-        .Left = 6120
-        .Top = 840
-        .Width = 1575
-        .Height = 735
-        .Caption = "Formulaire"
-        .BackColor = &H4080FF
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' Bouton Formulaire
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdFormulaire")
+    ctrl.Left = 3240
+    ctrl.Top = 840
+    ctrl.Width = 1575
+    ctrl.Height = 495
+    ctrl.Caption = "Formulaire"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set cmdHistorique = Me.Controls.Add("VB.CommandButton", "cmdHistorique")
-    With cmdHistorique
-        .Left = 7800
-        .Top = 840
-        .Width = 1575
-        .Height = 735
-        .Caption = "Historique"
-        .Visible = True
-    End With
+    ' Bouton Historique
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdHistorique")
+    ctrl.Left = 6000
+    ctrl.Top = 840
+    ctrl.Width = 1575
+    ctrl.Height = 495
+    ctrl.Caption = "Historique"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set cmdScannerPro = Me.Controls.Add("VB.CommandButton", "cmdScannerPro")
-    With cmdScannerPro
-        .Left = 9600
-        .Top = 120
-        .Width = 1575
-        .Height = 375
-        .Caption = "Scanner Pro"
-        .BackColor = &H80FF80
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' === SECTION INFORMATIONS GÉNÉRALES ===
     
-    ' === FRAME INFORMATIONS ===
-    Set frameInfos = Me.Controls.Add("VB.Frame", "frameInfos")
-    With frameInfos
-        .Left = 240
-        .Top = 1800
-        .Width = 10935
-        .Height = 2535
-        .Caption = "Informations générales"
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' Titre section Informations
+    Set ctrl = Me.Controls.Add("VB.Label", "lblTitreInfos")
+    ctrl.Left = 240
+    ctrl.Top = 1440
+    ctrl.Width = 8295
+    ctrl.Height = 300
+    ctrl.Caption = "=== INFORMATIONS GÉNÉRALES ==="
+    ctrl.BackColor = RGB(200, 200, 200)
+    ctrl.Font.Bold = True
+    ctrl.Alignment = 2
+    ctrl.Visible = True
     
-    ' === CHAMPS TEXTE ===
-    Set txtEnlevement = frameInfos.Controls.Add("VB.TextBox", "txtEnlevement")
-    With txtEnlevement
-        .Left = 1680
-        .Top = 480
-        .Width = 2415
-        .Height = 315
-        .Visible = True
-    End With
+    ' Label N° Enlèvement
+    Set ctrl = Me.Controls.Add("VB.Label", "lblEnlevement")
+    ctrl.Left = 480
+    ctrl.Top = 1800
+    ctrl.Width = 1335
+    ctrl.Height = 255
+    ctrl.Caption = "N° Enlèvement:"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set lblEnlevement = frameInfos.Controls.Add("VB.Label", "lblEnlevement")
-    With lblEnlevement
-        .Left = 240
-        .Top = 540
-        .Width = 1215
-        .Height = 255
-        .Caption = "N° Enlèvement:"
-        .Visible = True
-    End With
+    ' TextBox N° Enlèvement
+    Set ctrl = Me.Controls.Add("VB.TextBox", "txtEnlevement")
+    ctrl.Left = 480
+    ctrl.Top = 2040
+    ctrl.Width = 7055
+    ctrl.Height = 285
+    ctrl.Text = "69113"
+    ctrl.Visible = True
     
-    Set txtReception = frameInfos.Controls.Add("VB.TextBox", "txtReception")
-    With txtReception
-        .Left = 1680
-        .Top = 960
-        .Width = 2415
-        .Height = 315
-        .Visible = True
-    End With
+    ' Label N° Réception
+    Set ctrl = Me.Controls.Add("VB.Label", "lblReception")
+    ctrl.Left = 480
+    ctrl.Top = 2400
+    ctrl.Width = 1215
+    ctrl.Height = 255
+    ctrl.Caption = "N° Réception:"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set lblReception = frameInfos.Controls.Add("VB.Label", "lblReception")
-    With lblReception
-        .Left = 240
-        .Top = 1020
-        .Width = 1095
-        .Height = 255
-        .Caption = "N° Réception:"
-        .Visible = True
-    End With
+    ' TextBox N° Réception
+    Set ctrl = Me.Controls.Add("VB.TextBox", "txtReception")
+    ctrl.Left = 480
+    ctrl.Top = 2640
+    ctrl.Width = 7055
+    ctrl.Height = 285
+    ctrl.Text = "19108"
+    ctrl.Visible = True
     
-    Set txtDate = frameInfos.Controls.Add("VB.TextBox", "txtDate")
-    With txtDate
-        .Left = 1680
-        .Top = 1440
-        .Width = 2415
-        .Height = 315
-        .Visible = True
-    End With
+    ' Label Date
+    Set ctrl = Me.Controls.Add("VB.Label", "lblDate")
+    ctrl.Left = 480
+    ctrl.Top = 3000
+    ctrl.Width = 495
+    ctrl.Height = 255
+    ctrl.Caption = "Date:"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set lblDate = frameInfos.Controls.Add("VB.Label", "lblDate")
-    With lblDate
-        .Left = 240
-        .Top = 1500
-        .Width = 375
-        .Height = 255
-        .Caption = "Date:"
-        .Visible = True
-    End With
+    ' TextBox Date
+    Set ctrl = Me.Controls.Add("VB.TextBox", "txtDate")
+    ctrl.Left = 480
+    ctrl.Top = 3240
+    ctrl.Width = 7055
+    ctrl.Height = 285
+    ctrl.Text = "05/06/25"
+    ctrl.Visible = True
     
-    Set txtReference = frameInfos.Controls.Add("VB.TextBox", "txtReference")
-    With txtReference
-        .Left = 1680
-        .Top = 1920
-        .Width = 8775
-        .Height = 315
-        .Visible = True
-    End With
+    ' Label Référence
+    Set ctrl = Me.Controls.Add("VB.Label", "lblReference")
+    ctrl.Left = 480
+    ctrl.Top = 3600
+    ctrl.Width = 1455
+    ctrl.Height = 255
+    ctrl.Caption = "Référence produit:"
+    ctrl.Font.Bold = True
+    ctrl.Visible = True
     
-    Set lblReference = frameInfos.Controls.Add("VB.Label", "lblReference")
-    With lblReference
-        .Left = 240
-        .Top = 1980
-        .Width = 1335
-        .Height = 255
-        .Caption = "Référence produit:"
-        .Visible = True
-    End With
+    ' TextBox Référence
+    Set ctrl = Me.Controls.Add("VB.TextBox", "txtReference")
+    ctrl.Left = 480
+    ctrl.Top = 3840
+    ctrl.Width = 7055
+    ctrl.Height = 285
+    ctrl.Text = "VC2286 52000-1"
+    ctrl.Visible = True
     
-    ' === FRAME MOTIF ===
-    Set frameMotif = Me.Controls.Add("VB.Frame", "frameMotif")
-    With frameMotif
-        .Left = 240
-        .Top = 4440
-        .Width = 10935
-        .Height = 2175
-        .Caption = "Motif du retour"
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' === SECTION MOTIF DU RETOUR ===
     
-    Set optMecanique = frameMotif.Controls.Add("VB.OptionButton", "optMecanique")
-    With optMecanique
-        .Left = 240
-        .Top = 480
-        .Width = 4935
-        .Height = 255
-        .Caption = "MECANIQUE"
-        .Value = True
-        .Visible = True
-    End With
+    ' Titre section Motif
+    Set ctrl = Me.Controls.Add("VB.Label", "lblTitreMotif")
+    ctrl.Left = 240
+    ctrl.Top = 4200
+    ctrl.Width = 8295
+    ctrl.Height = 300
+    ctrl.Caption = "=== MOTIF DU RETOUR ==="
+    ctrl.BackColor = RGB(200, 200, 200)
+    ctrl.Font.Bold = True
+    ctrl.Alignment = 2
+    ctrl.Visible = True
     
-    Set optEsthetique = frameMotif.Controls.Add("VB.OptionButton", "optEsthetique")
-    With optEsthetique
-        .Left = 240
-        .Top = 840
-        .Width = 4935
-        .Height = 255
-        .Caption = "ESTHETIQUE"
-        .Visible = True
-    End With
+    ' Option Mécanique
+    Set ctrl = Me.Controls.Add("VB.OptionButton", "optMecanique")
+    ctrl.Left = 480
+    ctrl.Top = 4560
+    ctrl.Width = 1575
+    ctrl.Height = 255
+    ctrl.Caption = "MÉCANIQUE"
+    ctrl.Value = True
+    ctrl.BackColor = RGB(255, 128, 128)
+    ctrl.Visible = True
     
-    ' === FRAME COHERENCE ===
-    Set frameCoherence = frameMotif.Controls.Add("VB.Frame", "frameCoherence")
-    With frameCoherence
-        .Left = 5520
-        .Top = 480
-        .Width = 5175
-        .Height = 855
-        .Caption = "Cohérence avec la boutique:"
-        .Visible = True
-    End With
+    ' Option Esthétique
+    Set ctrl = Me.Controls.Add("VB.OptionButton", "optEsthetique")
+    ctrl.Left = 480
+    ctrl.Top = 4840
+    ctrl.Width = 1575
+    ctrl.Height = 255
+    ctrl.Caption = "ESTHÉTIQUE"
+    ctrl.Visible = True
     
-    Set optOui = frameCoherence.Controls.Add("VB.OptionButton", "optOui")
-    With optOui
-        .Left = 240
-        .Top = 240
-        .Width = 4695
-        .Height = 255
-        .Caption = "OUI"
-        .Value = True
-        .Visible = True
-    End With
+    ' === SECTION COHÉRENCE ===
     
-    Set optNon = frameCoherence.Controls.Add("VB.OptionButton", "optNon")
-    With optNon
-        .Left = 240
-        .Top = 480
-        .Width = 4695
-        .Height = 255
-        .Caption = "NON"
-        .Visible = True
-    End With
+    ' Titre section Cohérence
+    Set ctrl = Me.Controls.Add("VB.Label", "lblTitreCoherence")
+    ctrl.Left = 240
+    ctrl.Top = 5160
+    ctrl.Width = 8295
+    ctrl.Height = 300
+    ctrl.Caption = "=== COHÉRENCE AVEC LA BOUTIQUE ==="
+    ctrl.BackColor = RGB(200, 200, 200)
+    ctrl.Font.Bold = True
+    ctrl.Alignment = 2
+    ctrl.Visible = True
     
-    ' === FRAME DIAGNOSTIC ===
-    Set frameDiagnostic = Me.Controls.Add("VB.Frame", "frameDiagnostic")
-    With frameDiagnostic
-        .Left = 240
-        .Top = 6360
-        .Width = 10935
-        .Height = 2415
-        .Caption = "Diagnostic technique"
-        .Font.Bold = True
-        .Visible = True
-    End With
+    ' Option OUI
+    Set ctrl = Me.Controls.Add("VB.OptionButton", "optOui")
+    ctrl.Left = 480
+    ctrl.Top = 5520
+    ctrl.Width = 855
+    ctrl.Height = 255
+    ctrl.Caption = "OUI"
+    ctrl.Value = True
+    ctrl.BackColor = RGB(128, 255, 128)
+    ctrl.Visible = True
     
-    Set chkPiece = frameDiagnostic.Controls.Add("VB.CheckBox", "chkPiece")
-    With chkPiece
-        .Left = 240
-        .Top = 960
-        .Width = 10455
-        .Height = 255
-        .Caption = "PIECE MANQUANTE / PROBLEME CAPOT DU BAS DU FRIGO"
-        .Visible = True
-    End With
+    ' Option NON
+    Set ctrl = Me.Controls.Add("VB.OptionButton", "optNon")
+    ctrl.Left = 1680
+    ctrl.Top = 5520
+    ctrl.Width = 855
+    ctrl.Height = 255
+    ctrl.Caption = "NON"
+    ctrl.Visible = True
     
-    Set chkTechnique = frameDiagnostic.Controls.Add("VB.CheckBox", "chkTechnique")
-    With chkTechnique
-        .Left = 240
-        .Top = 1440
-        .Width = 10455
-        .Height = 255
-        .Caption = "TECHNIQUE : LUMIERE / FROID / MOTEUR / VITRE BRISEE"
-        .Visible = True
-    End With
+    ' === SECTION DIAGNOSTIC ===
     
-    Set chkRayures = frameDiagnostic.Controls.Add("VB.CheckBox", "chkRayures")
-    With chkRayures
-        .Left = 240
-        .Top = 1920
-        .Width = 10455
-        .Height = 255
-        .Caption = "RAYURES TROP IMPORTANTES"
-        .Value = 1 ' Checked
-        .Visible = True
-    End With
+    ' Titre section Diagnostic
+    Set ctrl = Me.Controls.Add("VB.Label", "lblTitreDiagnostic")
+    ctrl.Left = 240
+    ctrl.Top = 5880
+    ctrl.Width = 8295
+    ctrl.Height = 300
+    ctrl.Caption = "=== DIAGNOSTIC TECHNIQUE ==="
+    ctrl.BackColor = RGB(200, 200, 200)
+    ctrl.Font.Bold = True
+    ctrl.Alignment = 2
+    ctrl.Visible = True
+    
+    ' CheckBox Pièce
+    Set ctrl = Me.Controls.Add("VB.CheckBox", "chkPiece")
+    ctrl.Left = 480
+    ctrl.Top = 6240
+    ctrl.Width = 5295
+    ctrl.Height = 255
+    ctrl.Caption = "PIÈCE MANQUANTE // PROBLÈME CAPOT OU BAS DU FRIGO"
+    ctrl.Visible = True
+    
+    ' CheckBox Technique
+    Set ctrl = Me.Controls.Add("VB.CheckBox", "chkTechnique")
+    ctrl.Left = 480
+    ctrl.Top = 6520
+    ctrl.Width = 5775
+    ctrl.Height = 255
+    ctrl.Caption = "TECHNIQUE — LUMIÈRE // FROID // MOTEUR // VITRE BRISÉE"
+    ctrl.Visible = True
+    
+    ' CheckBox Rayures
+    Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRayures")
+    ctrl.Left = 480
+    ctrl.Top = 6800
+    ctrl.Width = 3375
+    ctrl.Height = 255
+    ctrl.Caption = "RAYURES TROP IMPORTANTES"
+    ctrl.Value = 1
+    ctrl.Visible = True
+    
+    ' === BOUTONS D'ACTION ===
+    
+    ' Bouton Sauvegarder
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdSauvegarder")
+    ctrl.Left = 9000
+    ctrl.Top = 2000
+    ctrl.Width = 1200
+    ctrl.Height = 400
+    ctrl.Caption = "Sauvegarder"
+    ctrl.Font.Bold = True
+    ctrl.BackColor = RGB(128, 255, 128)
+    ctrl.Visible = True
+    
+    ' Bouton Nouveau
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdNouveau")
+    ctrl.Left = 9000
+    ctrl.Top = 2500
+    ctrl.Width = 1200
+    ctrl.Height = 400
+    ctrl.Caption = "Nouveau"
+    ctrl.Font.Bold = True
+    ctrl.BackColor = RGB(255, 255, 128)
+    ctrl.Visible = True
+    
+    ' Bouton Imprimer
+    Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdImprimer")
+    ctrl.Left = 9000
+    ctrl.Top = 3000
+    ctrl.Width = 1200
+    ctrl.Height = 400
+    ctrl.Caption = "Imprimer"
+    ctrl.Font.Bold = True
+    ctrl.BackColor = RGB(200, 200, 255)
+    ctrl.Visible = True
 End Sub
 
-Private Sub InitialiserFormulaire()
-    txtEnlevement.Text = "69113"
-    txtReception.Text = "19108"
-    txtDate.Text = "05/06/25"
-    txtReference.Text = "VCZ286 52000-1"
-End Sub
-
-' === DÉCLARATIONS DES CONTRÔLES ===
-Dim lblTitre As Label
-Dim lblSousTitre As Label
-Dim cmdScanner As CommandButton
-Dim cmdFormulaire As CommandButton
-Dim cmdHistorique As CommandButton
-Dim cmdScannerPro As CommandButton
-Dim frameInfos As Frame
-Dim txtEnlevement As TextBox
-Dim lblEnlevement As Label
-Dim txtReception As TextBox
-Dim lblReception As Label
-Dim txtDate As TextBox
-Dim lblDate As Label
-Dim txtReference As TextBox
-Dim lblReference As Label
-Dim frameMotif As Frame
-Dim optMecanique As OptionButton
-Dim optEsthetique As OptionButton
-Dim frameCoherence As Frame
-Dim optOui As OptionButton
-Dim optNon As OptionButton
-Dim frameDiagnostic As Frame
-Dim chkPiece As CheckBox
-Dim chkTechnique As CheckBox
-Dim chkRayures As CheckBox
-
-' === ÉVÉNEMENTS ===
 Private Sub cmdScanner_Click()
-    MsgBox "Fonction Scanner", vbInformation
+    MsgBox "Fonction Scanner activée", vbInformation, "Scanner"
 End Sub
+    MsgBox "Ouverture du formulaire", vbInformation, "Formulaire"
 
 Private Sub cmdFormulaire_Click()
-    MsgBox "Formulaire validé!" & vbCrLf & _
-           "N° Enlèvement: " & txtEnlevement.Text & vbCrLf & _
-           "N° Réception: " & txtReception.Text & vbCrLf & _
-           "Date: " & txtDate.Text & vbCrLf & _
-           "Référence: " & txtReference.Text, vbInformation
 End Sub
 
 Private Sub cmdHistorique_Click()
-    MsgBox "Fonction Historique", vbInformation
+    MsgBox "Affichage de l'historique", vbInformation, "Historique"
 End Sub
 
-Private Sub cmdScannerPro_Click()
-    MsgBox "Scanner Pro activé", vbInformation
+Private Sub cmdSauvegarder_Click()
+    SauvegarderDonnees
 End Sub
 
+Private Sub cmdNouveau_Click()
+    ReinitialiserFormulaire
+End Sub
+
+Private Sub cmdImprimer_Click()
+    ImprimerFiche
+End Sub
+
+Private Sub SauvegarderDonnees()
+    Dim fichier As String
+    Dim numeroFichier As Integer
+    
+    ' Validation des données
+    If Len(Trim(Me.Controls("txtEnlevement").Text)) = 0 Then
+        MsgBox "Le numéro d'enlèvement est obligatoire !", vbExclamation
+        Me.Controls("txtEnlevement").SetFocus
+        Exit Sub
+    End If
+    
+    fichier = App.Path & "\SAV_" & Me.Controls("txtEnlevement").Text & ".txt"
+    numeroFichier = FreeFile
+    
+    Open fichier For Output As #numeroFichier
+    Print #numeroFichier, "=== FICHE RETOUR SAV RED BULL ==="
+    Print #numeroFichier, "Date de création: " & Now
+    Print #numeroFichier, String(50, "=")
+    Print #numeroFichier, ""
+    Print #numeroFichier, "INFORMATIONS GÉNÉRALES:"
+    Print #numeroFichier, "N° Enlèvement: " & Me.Controls("txtEnlevement").Text
+    Print #numeroFichier, "N° Réception: " & Me.Controls("txtReception").Text
+    Print #numeroFichier, "Date: " & Me.Controls("txtDate").Text
+    Print #numeroFichier, "Référence produit: " & Me.Controls("txtReference").Text
+    Print #numeroFichier, ""
+    Print #numeroFichier, "MOTIF DU RETOUR:"
+    If Me.Controls("optMecanique").Value Then Print #numeroFichier, "- MÉCANIQUE"
+    If Me.Controls("optEsthetique").Value Then Print #numeroFichier, "- ESTHÉTIQUE"
+    Print #numeroFichier, ""
+    Print #numeroFichier, "COHÉRENCE AVEC LA BOUTIQUE:"
+    If Me.Controls("optOui").Value Then Print #numeroFichier, "- OUI"
+    If Me.Controls("optNon").Value Then Print #numeroFichier, "- NON"
+    Print #numeroFichier, ""
+    Print #numeroFichier, "DIAGNOSTIC TECHNIQUE:"
+    If Me.Controls("chkPiece").Value = 1 Then Print #numeroFichier, "- PIÈCE MANQUANTE // PROBLÈME CAPOT OU BAS DU FRIGO"
+    If Me.Controls("chkTechnique").Value = 1 Then Print #numeroFichier, "- TECHNIQUE — LUMIÈRE // FROID // MOTEUR // VITRE BRISÉE"
+    If Me.Controls("chkRayures").Value = 1 Then Print #numeroFichier, "- RAYURES TROP IMPORTANTES"
+    Print #numeroFichier, ""
+    Print #numeroFichier, String(50, "=")
+    Close #numeroFichier
+    
+    MsgBox "Données sauvegardées avec succès !" & vbCrLf & "Fichier: " & fichier, vbInformation, "Sauvegarde"
+End Sub
+
+Private Sub ReinitialiserFormulaire()
+    Me.Controls("txtEnlevement").Text = ""
+    Me.Controls("txtReception").Text = ""
+    Me.Controls("txtDate").Text = Format(Date, "dd/mm/yy")
+    Me.Controls("txtReference").Text = ""
+    
+    Me.Controls("optMecanique").Value = True
+    Me.Controls("optOui").Value = True
+    
+    Me.Controls("chkPiece").Value = 0
+    Me.Controls("chkTechnique").Value = 0
+    Me.Controls("chkRayures").Value = 0
+    
+    Me.Controls("txtEnlevement").SetFocus
+End Sub
+
+Private Sub ImprimerFiche()
+    ' Fonction d'impression simple
+    Printer.Font.Name = "Arial"
+    Printer.Font.Size = 12
+    Printer.Font.Bold = True
+    
+    Printer.Print "=== FICHE RETOUR SAV RED BULL ==="
+    Printer.Print "Date: " & Now
+    Printer.Print ""
+    Printer.Font.Bold = False
+    Printer.Print "N° Enlèvement: " & Me.Controls("txtEnlevement").Text
+    Printer.Print "N° Réception: " & Me.Controls("txtReception").Text
+    Printer.Print "Date: " & Me.Controls("txtDate").Text
+    Printer.Print "Référence: " & Me.Controls("txtReference").Text
+    
+    Printer.EndDoc
+    MsgBox "Impression lancée !", vbInformation
+End Sub

@@ -1,0 +1,7 @@
+frmPrincipal = 52, 161, 1150, 807, Z, 26, 26, 1130, 676, C
+Module1 = 86, 123, 1190, 773, C
+frmFicheRetour = 130, 130, 1234, 780, , 104, 104, 1208, 754, C
+frmRecuperationPieces = 312, 312, 1416, 962, , 156, 156, 1260, 806, C
+frmStockReparable = 174, 68, 1278, 824, , 182, 182, 1286, 832, C
+frmAffectatonPieces = 104, 104, 1208, 754, , 78, 78, 1182, 728, C
+frmStockPieces = 156, 156, 1260, 806, , 130, 130, 1234, 780, C

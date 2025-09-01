@@ -28,21 +28,26 @@ Private WithEvents optCoherenceOui As OptionButton
 Attribute optCoherenceOui.VB_VarHelpID = -1
 Private WithEvents optCoherenceNon As OptionButton
 Attribute optCoherenceNon.VB_VarHelpID = -1
-Private WithEvents optStandard As OptionButton
-Attribute optStandard.VB_VarHelpID = -1
+Private WithEvents optReparable As OptionButton
+Attribute optReparable.VB_VarHelpID = -1
 Private WithEvents optHS As OptionButton
 Attribute optHS.VB_VarHelpID = -1
+
+' Variable pour éviter les boucles infinies lors de la création
+Private creationEnCours As Boolean
 
 Private Sub Form_Load()
     Me.BackColor = RGB(240, 240, 240)
     Me.Caption = "FICHE RETOUR - RED BULL"
-    Me.Width = 12000
-    Me.Height = 9000
+    Me.Width = 13000
+    Me.Height = 12000
     
     Me.Left = (Screen.Width - Me.Width) / 2
     Me.Top = (Screen.Height - Me.Height) / 2
     
+    creationEnCours = True
     CreerInterfaceFiche
+    creationEnCours = False
 End Sub
 
 Public Sub InitialiserAvecReference(reference As String)
@@ -70,14 +75,14 @@ Private Sub CreerInterfaceFiche()
     ' N° ENLEVEMENT
     Set ctrl = Me.Controls.Add("VB.Label", "lblEnlevement")
     ctrl.Left = 500
-    ctrl.Top = 800
+    ctrl.Top = 900
     ctrl.Width = 1800
     ctrl.Caption = "N° ENLEVEMENT :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtEnlevement")
     ctrl.Left = 2400
-    ctrl.Top = 800
+    ctrl.Top = 900
     ctrl.Width = 3000
     ctrl.Height = 300
     ctrl.Visible = True
@@ -85,14 +90,14 @@ Private Sub CreerInterfaceFiche()
     ' N° RECEPTION
     Set ctrl = Me.Controls.Add("VB.Label", "lblReception")
     ctrl.Left = 500
-    ctrl.Top = 1200
+    ctrl.Top = 1400
     ctrl.Width = 1800
     ctrl.Caption = "N° RECEPTION :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtReception")
     ctrl.Left = 2400
-    ctrl.Top = 1200
+    ctrl.Top = 1400
     ctrl.Width = 3000
     ctrl.Height = 300
     ctrl.Visible = True
@@ -100,14 +105,14 @@ Private Sub CreerInterfaceFiche()
     ' REFERENCE
     Set ctrl = Me.Controls.Add("VB.Label", "lblReference")
     ctrl.Left = 500
-    ctrl.Top = 1600
+    ctrl.Top = 1900
     ctrl.Width = 1800
     ctrl.Caption = "REFERENCE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtReference")
     ctrl.Left = 2400
-    ctrl.Top = 1600
+    ctrl.Top = 1900
     ctrl.Width = 3000
     ctrl.Height = 300
     ctrl.Text = referenceFrigo
@@ -115,56 +120,68 @@ Private Sub CreerInterfaceFiche()
     ctrl.BackColor = RGB(240, 240, 240)
     ctrl.Visible = True
     
-    ' MOTIF DU RETOUR
-    Set ctrl = Me.Controls.Add("VB.Label", "lblMotif")
+    ' MOTIF DU RETOUR - TITRE
+    Set ctrl = Me.Controls.Add("VB.Label", "lblMotifTitre")
     ctrl.Left = 500
-    ctrl.Top = 2100
+    ctrl.Top = 2500
     ctrl.Width = 2000
     ctrl.Caption = "MOTIF DU RETOUR :"
+    ctrl.BackColor = RGB(220, 220, 220)
+    ctrl.BorderStyle = 1
     ctrl.Visible = True
     
+    ' GROUPE MOTIF - Créer les deux ensemble
     Set optMecanique = Me.Controls.Add("VB.OptionButton", "optMecanique")
     optMecanique.Left = 2600
-    optMecanique.Top = 2100
+    optMecanique.Top = 2500
     optMecanique.Width = 1500
     optMecanique.Caption = "MECANIQUE"
-    optMecanique.Value = True
     optMecanique.Visible = True
     
     Set optEsthetique = Me.Controls.Add("VB.OptionButton", "optEsthetique")
     optEsthetique.Left = 4200
-    optEsthetique.Top = 2100
+    optEsthetique.Top = 2500
     optEsthetique.Width = 1500
     optEsthetique.Caption = "ESTHETIQUE"
     optEsthetique.Visible = True
     
-    ' COHERENCE AVEC LA BOUTIQUE
-    Set ctrl = Me.Controls.Add("VB.Label", "lblCoherence")
+    ' Définir les valeurs après création
+    optMecanique.Value = True
+    optEsthetique.Value = False
+    
+    ' COHERENCE AVEC LA BOUTIQUE - TITRE
+    Set ctrl = Me.Controls.Add("VB.Label", "lblCoherenceTitre")
     ctrl.Left = 500
-    ctrl.Top = 2500
+    ctrl.Top = 3000
     ctrl.Width = 2500
     ctrl.Caption = "COHERENCE AVEC LA BOUTIQUE :"
+    ctrl.BackColor = RGB(220, 220, 220)
+    ctrl.BorderStyle = 1
     ctrl.Visible = True
     
+    ' GROUPE COHERENCE - Créer les deux ensemble
     Set optCoherenceOui = Me.Controls.Add("VB.OptionButton", "optCoherenceOui")
     optCoherenceOui.Left = 3100
-    optCoherenceOui.Top = 2500
+    optCoherenceOui.Top = 3000
     optCoherenceOui.Width = 600
     optCoherenceOui.Caption = "OUI"
-    optCoherenceOui.Value = True
     optCoherenceOui.Visible = True
     
     Set optCoherenceNon = Me.Controls.Add("VB.OptionButton", "optCoherenceNon")
     optCoherenceNon.Left = 3800
-    optCoherenceNon.Top = 2500
+    optCoherenceNon.Top = 3000
     optCoherenceNon.Width = 600
     optCoherenceNon.Caption = "NON"
     optCoherenceNon.Visible = True
     
+    ' Définir les valeurs après création
+    optCoherenceOui.Value = True
+    optCoherenceNon.Value = False
+    
     ' DIAGNOSTIC
     Set ctrl = Me.Controls.Add("VB.Label", "lblDiagnostic")
     ctrl.Left = 500
-    ctrl.Top = 2900
+    ctrl.Top = 3600
     ctrl.Width = 1500
     ctrl.Caption = "DIAGNOSTIC :"
     ctrl.Visible = True
@@ -172,42 +189,42 @@ Private Sub CreerInterfaceFiche()
     ' Cases à cocher diagnostic
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkPieceManquante")
     ctrl.Left = 500
-    ctrl.Top = 3300
+    ctrl.Top = 4100
     ctrl.Width = 4000
     ctrl.Caption = "PIECE MANQUANTE // PROBLEME CAPOT OU BAS DU FRIGO"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkTechnique")
     ctrl.Left = 500
-    ctrl.Top = 3600
+    ctrl.Top = 4500
     ctrl.Width = 4000
     ctrl.Caption = "TECHNIQUE -> LUMIERE // FROID // MOTEUR // VITRE BRISEE"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRayures")
     ctrl.Left = 500
-    ctrl.Top = 3900
+    ctrl.Top = 4900
     ctrl.Width = 2000
     ctrl.Caption = "RAYURES TROP IMPORTANTES"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkLogoDegradé")
     ctrl.Left = 500
-    ctrl.Top = 4200
+    ctrl.Top = 5300
     ctrl.Width = 2000
     ctrl.Caption = "LOGO DEGRADE"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkObsolete")
     ctrl.Left = 500
-    ctrl.Top = 4500
+    ctrl.Top = 5700
     ctrl.Width = 2000
     ctrl.Caption = "OBSOLETE"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkBonEtat")
     ctrl.Left = 500
-    ctrl.Top = 4800
+    ctrl.Top = 6100
     ctrl.Width = 3000
     ctrl.Caption = "BON ETAT -> REMIS DANS LE CIRCUIT"
     ctrl.Visible = True
@@ -215,42 +232,42 @@ Private Sub CreerInterfaceFiche()
     ' REPARE / RECUPERE
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRepare")
     ctrl.Left = 500
-    ctrl.Top = 5100
+    ctrl.Top = 6600
     ctrl.Width = 1500
     ctrl.Caption = "REPARE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtTempsRepare")
     ctrl.Left = 2500
-    ctrl.Top = 5100
+    ctrl.Top = 6600
     ctrl.Width = 1000
     ctrl.Height = 300
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.Label", "lblTempsPasseRepare")
     ctrl.Left = 3600
-    ctrl.Top = 5100
+    ctrl.Top = 6600
     ctrl.Width = 1200
     ctrl.Caption = "/ TEMPS PASSE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRecupere")
     ctrl.Left = 500
-    ctrl.Top = 5500
+    ctrl.Top = 7100
     ctrl.Width = 1500
     ctrl.Caption = "RECUPERE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtTempsRecupere")
     ctrl.Left = 2500
-    ctrl.Top = 5500
+    ctrl.Top = 7100
     ctrl.Width = 1000
     ctrl.Height = 300
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.Label", "lblTempsPasseRecupere")
     ctrl.Left = 3600
-    ctrl.Top = 5500
+    ctrl.Top = 7100
     ctrl.Width = 1200
     ctrl.Caption = "/ TEMPS PASSE :"
     ctrl.Visible = True
@@ -258,14 +275,14 @@ Private Sub CreerInterfaceFiche()
     ' N° SERIE
     Set ctrl = Me.Controls.Add("VB.Label", "lblSerie")
     ctrl.Left = 500
-    ctrl.Top = 5900
+    ctrl.Top = 7700
     ctrl.Width = 1200
     ctrl.Caption = "N° SERIE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtSerie")
     ctrl.Left = 1800
-    ctrl.Top = 5900
+    ctrl.Top = 7700
     ctrl.Width = 2000
     ctrl.Height = 300
     ctrl.Visible = True
@@ -273,45 +290,51 @@ Private Sub CreerInterfaceFiche()
     ' COMMENTAIRE
     Set ctrl = Me.Controls.Add("VB.Label", "lblCommentaire")
     ctrl.Left = 500
-    ctrl.Top = 6300
+    ctrl.Top = 8200
     ctrl.Width = 1500
     ctrl.Caption = "COMMENTAIRE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtCommentaire")
     ctrl.Left = 500
-    ctrl.Top = 6600
+    ctrl.Top = 8600
     ctrl.Width = 6000
     ctrl.Height = 300
     ctrl.Visible = True
     
-    ' QUALITE
-    Set ctrl = Me.Controls.Add("VB.Label", "lblQualite")
+    ' QUALITE - TITRE
+    Set ctrl = Me.Controls.Add("VB.Label", "lblQualiteTitre")
     ctrl.Left = 500
-    ctrl.Top = 7000
+    ctrl.Top = 9100
     ctrl.Width = 1200
     ctrl.Caption = "QUALITE :"
+    ctrl.BackColor = RGB(220, 220, 220)
+    ctrl.BorderStyle = 1
     ctrl.Visible = True
     
-    Set optStandard = Me.Controls.Add("VB.OptionButton", "optStandard")
-    optStandard.Left = 1800
-    optStandard.Top = 7000
-    optStandard.Width = 1500
-    optStandard.Caption = "STANDARD"
-    optStandard.Value = True
-    optStandard.Visible = True
+    ' GROUPE QUALITE - Créer les deux ensemble
+    Set optReparable = Me.Controls.Add("VB.OptionButton", "optReparable")
+    optReparable.Left = 1800
+    optReparable.Top = 9100
+    optReparable.Width = 1500
+    optReparable.Caption = "REPARABLE"
+    optReparable.Visible = True
     
     Set optHS = Me.Controls.Add("VB.OptionButton", "optHS")
     optHS.Left = 3500
-    optHS.Top = 7000
+    optHS.Top = 9100
     optHS.Width = 1000
     optHS.Caption = "HS"
     optHS.Visible = True
     
+    ' Définir les valeurs après création
+    optReparable.Value = True
+    optHS.Value = False
+    
     ' Boutons
     Set cmdValider = Me.Controls.Add("VB.CommandButton", "cmdValider")
     cmdValider.Left = 2000
-    cmdValider.Top = 7600
+    cmdValider.Top = 9800
     cmdValider.Width = 1800
     cmdValider.Height = 400
     cmdValider.Caption = "VALIDER FICHE"
@@ -320,7 +343,7 @@ Private Sub CreerInterfaceFiche()
     
     Set cmdAnnuler = Me.Controls.Add("VB.CommandButton", "cmdAnnuler")
     cmdAnnuler.Left = 4000
-    cmdAnnuler.Top = 7600
+    cmdAnnuler.Top = 9800
     cmdAnnuler.Width = 1800
     cmdAnnuler.Height = 400
     cmdAnnuler.Caption = "ANNULER"
@@ -328,22 +351,73 @@ Private Sub CreerInterfaceFiche()
     cmdAnnuler.Visible = True
 End Sub
 
+' GESTION MANUELLE DES GROUPES - GROUPE MOTIF
+Private Sub optMecanique_Click()
+    If creationEnCours Then Exit Sub
+    If optMecanique.Value = True Then
+        If Not optEsthetique Is Nothing Then optEsthetique.Value = False
+    End If
+End Sub
+
+Private Sub optEsthetique_Click()
+    If creationEnCours Then Exit Sub
+    If optEsthetique.Value = True Then
+        If Not optMecanique Is Nothing Then optMecanique.Value = False
+    End If
+End Sub
+
+' GESTION MANUELLE DES GROUPES - GROUPE COHERENCE
+Private Sub optCoherenceOui_Click()
+    If creationEnCours Then Exit Sub
+    If optCoherenceOui.Value = True Then
+        If Not optCoherenceNon Is Nothing Then optCoherenceNon.Value = False
+    End If
+End Sub
+
+Private Sub optCoherenceNon_Click()
+    If creationEnCours Then Exit Sub
+    If optCoherenceNon.Value = True Then
+        If Not optCoherenceOui Is Nothing Then optCoherenceOui.Value = False
+    End If
+End Sub
+
+' GESTION MANUELLE DES GROUPES - GROUPE QUALITE
+Private Sub optReparable_Click()
+    If creationEnCours Then Exit Sub
+    If optReparable.Value = True Then
+        If Not optHS Is Nothing Then optHS.Value = False
+    End If
+End Sub
+
+Private Sub optHS_Click()
+    If creationEnCours Then Exit Sub
+    If optHS.Value = True Then
+        If Not optReparable Is Nothing Then optReparable.Value = False
+    End If
+End Sub
+
 Private Sub cmdValider_Click()
     If Not ValiderFormulaire() Then Exit Sub
     
-    Dim statut As String
+    Dim Statut As String
     If optHS.Value = True Then
-        statut = "HS"
+        Statut = "HS"
     Else
-        statut = "STANDARD"
+        Statut = "REPARABLE"
     End If
     
-    SauvegarderFiche statut
+    SauvegarderFiche Statut
     
-    If statut = "HS" Then
-        MsgBox "Fiche sauvegardée - Frigo marqué HS" & vbCrLf & "Processus de récupération des pièces à implémenter", vbInformation
+    If Statut = "HS" Then
+        MsgBox "Fiche sauvegardée - Frigo marqué HS" & vbCrLf & "Ouverture du processus de récupération des pièces", vbInformation
+        
+        ' Ouvrir le formulaire de récupération des pièces
+        Load frmRecuperationPieces
+        frmRecuperationPieces.InitialiserAvecFrigo referenceFrigo, "Nom_Frigoriste"
+        frmRecuperationPieces.Show vbModal
+        
     Else
-        MsgBox "Fiche sauvegardée - Frigo marqué STANDARD" & vbCrLf & "Frigo remis en circuit", vbInformation
+        MsgBox "Fiche sauvegardée - Frigo marqué REPARABLE" & vbCrLf & "Frigo envoyé en réparation", vbInformation
     End If
     
     Me.Hide
@@ -365,7 +439,7 @@ Private Function ValiderFormulaire() As Boolean
     ValiderFormulaire = True
 End Function
 
-Private Sub SauvegarderFiche(statut As String)
+Private Sub SauvegarderFiche(Statut As String)
     On Error GoTo GestionErreur
     
     If Dir(App.Path & "\Fiches", vbDirectory) = "" Then
@@ -405,7 +479,7 @@ Private Sub SauvegarderFiche(statut As String)
     Print #numeroFichier, "N° SERIE: " & Me.Controls("txtSerie").Text
     Print #numeroFichier, "COMMENTAIRE: " & Me.Controls("txtCommentaire").Text
     Print #numeroFichier, ""
-    Print #numeroFichier, "QUALITE: " & statut
+    Print #numeroFichier, "QUALITE: " & Statut
     Print #numeroFichier, "Date création: " & Now
     Close #numeroFichier
     

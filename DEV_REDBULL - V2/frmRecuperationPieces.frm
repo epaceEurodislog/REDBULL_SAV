@@ -23,8 +23,8 @@ Private nomFrigoriste As String
 Private Sub Form_Load()
     Me.BackColor = RGB(240, 240, 240)
     Me.Caption = "Récupération Pièces - " & referenceFrigo
-    Me.Width = 14000
-    Me.Height = 10000
+    Me.Width = 15000
+    Me.Height = 14000
     
     Me.Left = (Screen.Width - Me.Width) / 2
     Me.Top = (Screen.Height - Me.Height) / 2
@@ -45,9 +45,9 @@ Private Sub CreerInterfaceRecuperation()
     Set ctrl = Me.Controls.Add("VB.Label", "lblTitre")
     ctrl.Left = 240
     ctrl.Top = 120
-    ctrl.Width = 10000
+    ctrl.Width = 12000
     ctrl.Height = 400
-    ctrl.Caption = "?? RÉCUPÉRATION DES PIÈCES - FRIGO HS ??"
+    ctrl.Caption = "RÉCUPÉRATION DES PIÈCES - FRIGO HS"
     ctrl.BackColor = RGB(255, 100, 100)
     ctrl.ForeColor = RGB(255, 255, 255)
     ctrl.Font.Size = 16
@@ -59,7 +59,7 @@ Private Sub CreerInterfaceRecuperation()
     Set ctrl = Me.Controls.Add("VB.Label", "lblInfoFrigo")
     ctrl.Left = 240
     ctrl.Top = 600
-    ctrl.Width = 10000
+    ctrl.Width = 12000
     ctrl.Height = 300
     ctrl.Caption = "Référence: " & referenceFrigo & " | Frigoriste: " & nomFrigoriste & " | Date: " & Format(Now, "dd/mm/yyyy")
     ctrl.BackColor = RGB(255, 255, 200)
@@ -70,8 +70,8 @@ Private Sub CreerInterfaceRecuperation()
     ' Instructions
     Set ctrl = Me.Controls.Add("VB.Label", "lblInstructions")
     ctrl.Left = 240
-    ctrl.Top = 960
-    ctrl.Width = 10000
+    ctrl.Top = 1000
+    ctrl.Width = 12000
     ctrl.Height = 400
     ctrl.Caption = "Sélectionnez les pièces récupérables et ajustez les quantités avec les boutons + et -"
     ctrl.Font.Size = 11
@@ -81,41 +81,41 @@ Private Sub CreerInterfaceRecuperation()
     ' === LISTE DES PIÈCES RÉCUPÉRABLES ===
     
     ' Compresseur
-    CreerLignePiece 1440, "Compresseur", "COMP", 1, 0
+    CreerLignePiece 1600, "Compresseur", "COMP", 1, 0
     
     ' Éclairage LED
-    CreerLignePiece 1800, "Éclairage LED", "LED", 2, 1
+    CreerLignePiece 2000, "Éclairage LED", "LED", 2, 1
     
     ' Vitre
-    CreerLignePiece 2160, "Vitre principale", "VITRE", 1, 2
+    CreerLignePiece 2400, "Vitre principale", "VITRE", 1, 2
     
     ' Thermostat
-    CreerLignePiece 2520, "Thermostat digital", "THERMO", 1, 3
+    CreerLignePiece 2800, "Thermostat digital", "THERMO", 1, 3
     
     ' Joints de porte
-    CreerLignePiece 2880, "Joints de porte", "JOINT", 4, 4
+    CreerLignePiece 3200, "Joints de porte", "JOINT", 4, 4
     
     ' Grilles
-    CreerLignePiece 3240, "Grilles métalliques", "GRILLE", 3, 5
+    CreerLignePiece 3600, "Grilles métalliques", "GRILLE", 3, 5
     
     ' Ventilateur
-    CreerLignePiece 3600, "Ventilateur", "VENTILO", 1, 6
+    CreerLignePiece 4000, "Ventilateur", "VENTILO", 1, 6
     
     ' Capot arrière
-    CreerLignePiece 3960, "Capot arrière", "CAPOT", 1, 7
+    CreerLignePiece 4400, "Capot arrière", "CAPOT", 1, 7
     
     ' Pieds réglables
-    CreerLignePiece 4320, "Pieds réglables", "PIED", 4, 8
+    CreerLignePiece 4800, "Pieds réglables", "PIED", 4, 8
     
     ' Câblage électrique
-    CreerLignePiece 4680, "Câblage électrique", "CABLE", 1, 9
+    CreerLignePiece 5200, "Câblage électrique", "CABLE", 1, 9
     
     ' === RÉSUMÉ ET VALIDATION ===
     
     Set ctrl = Me.Controls.Add("VB.Label", "lblTitreResume")
     ctrl.Left = 240
-    ctrl.Top = 5200
-    ctrl.Width = 10000
+    ctrl.Top = 5800
+    ctrl.Width = 12000
     ctrl.Height = 300
     ctrl.Caption = "=== RÉSUMÉ DES PIÈCES RÉCUPÉRÉES ==="
     ctrl.BackColor = RGB(200, 200, 200)
@@ -125,30 +125,28 @@ Private Sub CreerInterfaceRecuperation()
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtResume")
     ctrl.Left = 240
-    ctrl.Top = 5520
-    ctrl.Width = 10000
+    ctrl.Top = 6200
+    ctrl.Width = 12000
     ctrl.Height = 1200
-    ctrl.MultiLine = True
-    ctrl.ScrollBars = 2
     ctrl.BackColor = RGB(255, 255, 240)
     ctrl.Text = "Aucune pièce sélectionnée"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdMettreAJourResume")
     ctrl.Left = 240
-    ctrl.Top = 6800
+    ctrl.Top = 7600
     ctrl.Width = 2000
     ctrl.Height = 400
-    ctrl.Caption = "?? Mettre à jour résumé"
+    ctrl.Caption = "Mettre à jour résumé"
     ctrl.Font.Bold = True
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdValiderRecuperation")
     ctrl.Left = 4000
-    ctrl.Top = 6800
+    ctrl.Top = 7600
     ctrl.Width = 2500
     ctrl.Height = 400
-    ctrl.Caption = "? VALIDER RÉCUPÉRATION"
+    ctrl.Caption = "VALIDER RÉCUPÉRATION"
     ctrl.Font.Bold = True
     ctrl.Font.Size = 12
     ctrl.BackColor = RGB(128, 255, 128)
@@ -156,10 +154,10 @@ Private Sub CreerInterfaceRecuperation()
     
     Set ctrl = Me.Controls.Add("VB.CommandButton", "cmdAnnuler")
     ctrl.Left = 7000
-    ctrl.Top = 6800
+    ctrl.Top = 7600
     ctrl.Width = 2000
     ctrl.Height = 400
-    ctrl.Caption = "? ANNULER"
+    ctrl.Caption = "ANNULER"
     ctrl.Font.Bold = True
     ctrl.BackColor = RGB(255, 128, 128)
     ctrl.Visible = True
@@ -176,7 +174,7 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Left = 480
     ctrl.Top = topPosition
     ctrl.Width = 300
-    ctrl.Height = 255
+    ctrl.Height = 300
     ctrl.Caption = ""
     ctrl.Visible = True
     
@@ -185,7 +183,7 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Left = 840
     ctrl.Top = topPosition
     ctrl.Width = 3000
-    ctrl.Height = 255
+    ctrl.Height = 300
     ctrl.Caption = nomPiece & " (" & codePiece & ")"
     ctrl.Font.Bold = True
     ctrl.Visible = True
@@ -195,7 +193,7 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Left = 4000
     ctrl.Top = topPosition
     ctrl.Width = 1500
-    ctrl.Height = 255
+    ctrl.Height = 300
     ctrl.Caption = "Dispo: " & quantiteMax
     ctrl.Visible = True
     
@@ -205,7 +203,7 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Top = topPosition
     ctrl.Width = 400
     ctrl.Height = 300
-    ctrl.Caption = "?"
+    ctrl.Caption = "-"
     ctrl.Font.Size = 14
     ctrl.Tag = index
     ctrl.Visible = True
@@ -215,7 +213,7 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Left = 6240
     ctrl.Top = topPosition
     ctrl.Width = 600
-    ctrl.Height = 285
+    ctrl.Height = 300
     ctrl.Text = "0"
     ctrl.Alignment = 2
     ctrl.Font.Bold = True
@@ -227,36 +225,13 @@ Private Sub CreerLignePiece(topPosition As Long, nomPiece As String, codePiece A
     ctrl.Top = topPosition
     ctrl.Width = 400
     ctrl.Height = 300
-    ctrl.Caption = "?"
+    ctrl.Caption = "+"
     ctrl.Font.Size = 14
     ctrl.Tag = index
     ctrl.Visible = True
-    
-    ' État de la pièce
-    Set ctrl = Me.Controls.Add("VB.ComboBox", "cmbEtat" & index)
-    ctrl.Left = 7400
-    ctrl.Top = topPosition
-    ctrl.Width = 1800
-    ctrl.Height = 300
-    ctrl.AddItem "Excellent"
-    ctrl.AddItem "Bon"
-    ctrl.AddItem "Moyen"
-    ctrl.AddItem "Défectueux"
-    ctrl.ListIndex = 1 ' "Bon" par défaut
-    ctrl.Visible = True
-    
-    ' Prix estimé
-    Set ctrl = Me.Controls.Add("VB.Label", "lblPrix" & index)
-    ctrl.Left = 9400
-    ctrl.Top = topPosition
-    ctrl.Width = 800
-    ctrl.Height = 255
-    ctrl.Caption = CalculerPrixPiece(codePiece, 1) & "€"
-    ctrl.Font.Bold = True
-    ctrl.Visible = True
 End Sub
 
-Private Function CalculerPrixPiece(codePiece As String, quantite As Integer) As String
+Private Function CalculerPrixPiece(codePiece As String, Quantite As Integer) As String
     Dim prixUnitaire As Double
     
     Select Case codePiece
@@ -273,69 +248,89 @@ Private Function CalculerPrixPiece(codePiece As String, quantite As Integer) As 
         Case Else: prixUnitaire = 20
     End Select
     
-    CalculerPrixPiece = Format(prixUnitaire * quantite, "0.00")
+    CalculerPrixPiece = Format(prixUnitaire * Quantite, "0.00")
 End Function
 
-' Gestion des boutons + et -
+
 Private Sub cmdPlus0_Click()
     AjusterQuantite 0, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins0_Click()
     AjusterQuantite 0, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus1_Click()
     AjusterQuantite 1, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins1_Click()
     AjusterQuantite 1, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus2_Click()
     AjusterQuantite 2, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins2_Click()
     AjusterQuantite 2, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus3_Click()
     AjusterQuantite 3, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins3_Click()
     AjusterQuantite 3, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus4_Click()
     AjusterQuantite 4, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins4_Click()
     AjusterQuantite 4, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus5_Click()
     AjusterQuantite 5, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins5_Click()
     AjusterQuantite 5, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus6_Click()
     AjusterQuantite 6, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins6_Click()
     AjusterQuantite 6, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus7_Click()
     AjusterQuantite 7, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins7_Click()
     AjusterQuantite 7, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus8_Click()
     AjusterQuantite 8, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins8_Click()
     AjusterQuantite 8, -1
+    MettreAJourResume
 End Sub
 Private Sub cmdPlus9_Click()
     AjusterQuantite 9, 1
+    MettreAJourResume
 End Sub
 Private Sub cmdMoins9_Click()
     AjusterQuantite 9, -1
+    MettreAJourResume
 End Sub
 
 Private Sub AjusterQuantite(index As Integer, ajustement As Integer)
@@ -377,7 +372,7 @@ Private Sub AjusterQuantite(index As Integer, ajustement As Integer)
         Case 9: codePiece = "CABLE"
     End Select
     
-    Me.Controls("lblPrix" & index).Caption = CalculerPrixPiece(codePiece, nouvelleQuantite) & "€"
+    Me.Controls("lblPrix" & index).Caption = "0.00€"
 End Sub
 
 Private Sub cmdMettreAJourResume_Click()
@@ -385,13 +380,11 @@ Private Sub cmdMettreAJourResume_Click()
 End Sub
 
 Private Sub MettreAJourResume()
-    Dim resume As String
-    Dim totalPrix As Double
+    Dim resumeTexte As String
     Dim nbPiecesRecuperees As Integer
     
-    resume = "RÉCAPITULATIF RÉCUPÉRATION - " & referenceFrigo & vbCrLf
-    resume = resume & "Frigoriste: " & nomFrigoriste & " | Date: " & Format(Now, "dd/mm/yyyy hh:nn:ss") & vbCrLf
-    resume = resume & String(60, "=") & vbCrLf & vbCrLf
+    resumeTexte = "RÉCUPÉRATION - " & referenceFrigo & " | "
+    resumeTexte = resumeTexte & "Frigoriste: " & nomFrigoriste & " | Date: " & Format(Now, "dd/mm/yyyy hh:nn:ss") & " | "
     
     Dim pieces(9) As String
     pieces(0) = "Compresseur"
@@ -420,30 +413,22 @@ Private Sub MettreAJourResume()
     For i = 0 To 9
         If Me.Controls("chk" & i).Value = 1 And Val(Me.Controls("txtQte" & i).Text) > 0 Then
             Dim qte As Integer
-            Dim etat As String
-            Dim prix As Double
             
             qte = Val(Me.Controls("txtQte" & i).Text)
-            etat = Me.Controls("cmbEtat" & i).Text
-            prix = Val(CalculerPrixPiece(codes(i), qte))
             
-            resume = resume & "• " & pieces(i) & " (" & codes(i) & ")" & vbCrLf
-            resume = resume & "  Quantité: " & qte & " | État: " & etat & " | Valeur: " & Format(prix, "0.00") & "€" & vbCrLf & vbCrLf
+            resumeTexte = resumeTexte & pieces(i) & " (" & codes(i) & "): " & qte & " | "
             
-            totalPrix = totalPrix + prix
             nbPiecesRecuperees = nbPiecesRecuperees + qte
         End If
     Next i
     
     If nbPiecesRecuperees = 0 Then
-        resume = resume & "? AUCUNE PIÈCE SÉLECTIONNÉE" & vbCrLf
+        resumeTexte = resumeTexte & "AUCUNE PIÈCE SÉLECTIONNÉE"
     Else
-        resume = resume & String(60, "-") & vbCrLf
-        resume = resume & "TOTAL: " & nbPiecesRecuperees & " pièces récupérées" & vbCrLf
-        resume = resume & "VALEUR TOTALE: " & Format(totalPrix, "0.00") & "€" & vbCrLf
+        resumeTexte = resumeTexte & "TOTAL: " & nbPiecesRecuperees & " pièces récupérées"
     End If
     
-    Me.Controls("txtResume").Text = resume
+    Me.Controls("txtResume").Text = resumeTexte
 End Sub
 
 Private Sub cmdValiderRecuperation_Click()
@@ -509,8 +494,8 @@ Private Sub AjouterAuStockPieces()
         If Me.Controls("chk" & i).Value = 1 And Val(Me.Controls("txtQte" & i).Text) > 0 Then
             Dim ligne As String
             ligne = codes(i) & "|" & pieces(i) & "|" & Me.Controls("txtQte" & i).Text & "|"
-            ligne = ligne & Me.Controls("cmbEtat" & i).Text & "|" & referenceFrigo & "|"
-            ligne = ligne & Format(Now, "dd/mm/yyyy hh:nn:ss") & "|" & CalculerPrixPiece(codes(i), Val(Me.Controls("txtQte" & i).Text))
+            ligne = ligne & "Recupere" & "|" & referenceFrigo & "|"
+            ligne = ligne & Format(Now, "dd/mm/yyyy hh:nn:ss") & "|0.00"
             Print #numeroFichier, ligne
         End If
     Next i
@@ -523,4 +508,3 @@ Private Sub cmdAnnuler_Click()
         Me.Hide
     End If
 End Sub
-

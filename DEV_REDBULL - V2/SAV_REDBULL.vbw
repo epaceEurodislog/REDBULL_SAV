@@ -1,7 +1,13 @@
-frmPrincipal = 52, 161, 1150, 807, I, 26, 26, 1130, 676, C
-Module1 = 87, 67, 1191, 717, C
+frmPrincipal = 110, 119, 1208, 764, , 26, 26, 1130, 676, C
 frmFicheRetour = 133, 68, 1237, 718, , 104, 104, 1208, 754, C
 frmRecuperationPieces = 283, 126, 1387, 776, I, 156, 156, 1260, 806, C
 frmStockReparable = 174, 68, 1278, 824, I, 182, 182, 1286, 832, C
-frmAffectatonPieces = 104, 104, 1208, 754, I, 78, 78, 1182, 728, C
+frmAffectatonPieces = 104, 104, 1208, 754, , 78, 78, 1182, 728, C
 frmStockPieces = 156, 156, 1260, 806, I, 130, 130, 1234, 780, C
+cSQL_Query = 130, 130, 1234, 763, 
+modConstantes = 26, 26, 969, 608, 
+modConnexionBDD = 52, 52, 995, 634, 
+modRequetesBDD = 78, 78, 1021, 660, 
+modUtilitaires = 104, 104, 1047, 686, 
+Module1 = 78, 78, 1182, 728, 
+Module2 = 104, 104, 1208, 754, 

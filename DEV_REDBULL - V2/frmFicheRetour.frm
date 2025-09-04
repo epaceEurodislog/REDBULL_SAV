@@ -16,6 +16,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private referenceFrigo As String
+Private numeroSerieFrigo As String
+
 Private WithEvents cmdValider As CommandButton
 Attribute cmdValider.VB_VarHelpID = -1
 Private WithEvents cmdAnnuler As CommandButton
@@ -49,12 +51,23 @@ Private Sub Form_Load()
     CreerInterfaceFiche
     creationEnCours = False
 End Sub
-
-Public Sub InitialiserAvecReference(reference As String)
+Public Sub InitialiserAvecReference(reference As String, numeroSerie As String)
+    ' Stocker les deux valeurs
     referenceFrigo = reference
+    numeroSerieFrigo = numeroSerie
+    
+    ' Remplir les contrôles correspondants
     On Error Resume Next
     Me.Controls("txtReference").Text = referenceFrigo
+    Me.Controls("txtSerie").Text = numeroSerieFrigo
+    
+    ' Mettre à jour le titre du formulaire
+    Me.Caption = "FICHE RETOUR - RED BULL - " & numeroSerieFrigo
+    
     On Error GoTo 0
+    
+    ' NOUVEAU : Récupérer automatiquement le numéro de réception REE_Nore
+    RecupererNumeroReceptionREE numeroSerieFrigo
 End Sub
 
 Private Sub CreerInterfaceFiche()
@@ -399,16 +412,16 @@ End Sub
 Private Sub cmdValider_Click()
     If Not ValiderFormulaire() Then Exit Sub
     
-    Dim Statut As String
+    Dim statut As String
     If optHS.Value = True Then
-        Statut = "HS"
+        statut = "HS"
     Else
-        Statut = "REPARABLE"
+        statut = "REPARABLE"
     End If
     
-    SauvegarderFiche Statut
+    SauvegarderFiche statut
     
-    If Statut = "HS" Then
+    If statut = "HS" Then
         MsgBox "Fiche sauvegardée - Frigo marqué HS" & vbCrLf & "Ouverture du processus de récupération des pièces", vbInformation
         
         ' Ouvrir le formulaire de récupération des pièces
@@ -439,7 +452,7 @@ Private Function ValiderFormulaire() As Boolean
     ValiderFormulaire = True
 End Function
 
-Private Sub SauvegarderFiche(Statut As String)
+Private Sub SauvegarderFiche(statut As String)
     On Error GoTo GestionErreur
     
     If Dir(App.Path & "\Fiches", vbDirectory) = "" Then
@@ -479,18 +492,63 @@ Private Sub SauvegarderFiche(Statut As String)
     Print #numeroFichier, "N° SERIE: " & Me.Controls("txtSerie").Text
     Print #numeroFichier, "COMMENTAIRE: " & Me.Controls("txtCommentaire").Text
     Print #numeroFichier, ""
-    Print #numeroFichier, "QUALITE: " & Statut
+    Print #numeroFichier, "QUALITE: " & statut
     Print #numeroFichier, "Date création: " & Now
     Close #numeroFichier
     
     Exit Sub
     
 GestionErreur:
-    MsgBox "Erreur lors de la sauvegarde: " & Err.Description, vbCritical
+    MsgBox "Erreur lors de la sauvegarde: " & Err.description, vbCritical
 End Sub
 
 Private Sub cmdAnnuler_Click()
     If MsgBox("Etes-vous sûr de vouloir annuler cette fiche ?", vbYesNo + vbQuestion) = vbYes Then
         Me.Hide
     End If
+End Sub
+
+
+' Récupération automatique du numéro de réception (VERSION CORRIGÉE)
+Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
+    On Error GoTo ErrorHandler
+    
+    If Not VerifierConnexionBDD() Then
+        MsgBox "Impossible de récupérer le numéro de réception : pas de connexion BDD", vbExclamation
+        Exit Sub
+    End If
+    
+    ' Utiliser la fonction directe sans jointures problématiques
+    Dim donneesREE As TypeDonneesREE
+    donneesREE = RecupererNumeroReceptionDirect(numeroSerie)
+    
+    If donneesREE.trouve Then
+        ' Numéro de réception trouvé
+        On Error Resume Next
+        Me.Controls("txtReception").Text = donneesREE.numeroReception
+        Me.Controls("txtReception").Enabled = False
+        Me.Controls("txtReception").BackColor = RGB(240, 240, 240)
+        On Error GoTo 0
+        
+        MsgBox "Numéro de réception récupéré automatiquement :" & vbCrLf & _
+               "• N° Réception : " & donneesREE.numeroReception, _
+               vbInformation, "Données BDD récupérées"
+    Else
+        ' Permettre saisie manuelle
+        On Error Resume Next
+        Me.Controls("txtReception").Text = ""
+        Me.Controls("txtReception").Enabled = True
+        Me.Controls("txtReception").BackColor = RGB(255, 255, 255)
+        On Error GoTo 0
+        
+        MsgBox "Aucun numéro de réception trouvé." & vbCrLf & _
+               "Saisie manuelle requise.", _
+               vbExclamation, "Saisie manuelle requise"
+    End If
+    
+    Exit Sub
+    
+ErrorHandler:
+    MsgBox "Erreur lors de la récupération du numéro de réception :" & vbCrLf & _
+           Err.description, vbCritical
 End Sub

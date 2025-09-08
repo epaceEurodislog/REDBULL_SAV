@@ -1,0 +1,9 @@
+25/08/25 13:54:34 - VC2286-52000-1 - Vitrine VC2286
+01/09/25 13:22:05 - SYSTEM - Application fermée [BDD: NON TROUVÉ]
+01/09/25 16:15:05 - SYSTEM - Application fermée [BDD: NON TROUVÉ]
+02/09/25 09:07:01 - SYSTEM - Application fermée [BDD: NON TROUVÉ]
+02/09/25 13:26:16 - SYSTEM - Application fermée [BDD: NON TROUVÉ]
+02/09/25 15:10:36 - 820115755 - Équipement Red Bull - Modèle non identifié [BDD: NUMÉRO DE SÉRIE TROUVÉ]
+03/09/25 09:37:08 - SYSTEM - Application fermée [BDD: NUMÉRO DE SÉRIE NON TROUVÉ]
+03/09/25 10:51:08 - SYSTEM - Application fermée [BDD: NUMÉRO DE SÉRIE NON TROUVÉ]
+03/09/25 11:39:02 - 013725 - ERREUR: Format de numéro de série invalide [BDD: NUMÉRO DE SÉRIE TROUVÉ]

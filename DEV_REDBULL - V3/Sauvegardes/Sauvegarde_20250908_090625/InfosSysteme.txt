@@ -1,0 +1,10 @@
+=== INFORMATIONS SYSTÈME ===
+Application: SAV Red Bull Scanner Pro v2.1
+Chemin: C:\Users\BDEQUEKER\OneDrive\Bureau\Eurodislog 2024-2025\REDBULL_SAV\REDBULL_SAV\DEV_REDBULL - V3
+Date système: 08/09/2025 09:06:25
+Utilisateur: Enzo PACE
+Ordinateur: BDEQUEKER2
+Base de données: DÉCONNECTÉE
+Serveur BDD: 192.168.9.12
+Base: SPEED_V6
+

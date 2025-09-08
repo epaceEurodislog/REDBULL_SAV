@@ -51,6 +51,7 @@ Private Sub Form_Load()
     CreerInterfaceFiche
     creationEnCours = False
 End Sub
+
 Public Sub InitialiserAvecReference(reference As String, numeroSerie As String)
     ' Stocker les deux valeurs
     referenceFrigo = reference
@@ -66,7 +67,7 @@ Public Sub InitialiserAvecReference(reference As String, numeroSerie As String)
     
     On Error GoTo 0
     
-    ' NOUVEAU : Récupérer automatiquement le numéro de réception REE_Nore
+    ' Récupérer automatiquement le numéro de réception REE_Nore
     RecupererNumeroReceptionREE numeroSerieFrigo
 End Sub
 
@@ -508,7 +509,6 @@ Private Sub cmdAnnuler_Click()
     End If
 End Sub
 
-
 ' Récupération automatique du numéro de réception (VERSION CORRIGÉE)
 Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
     On Error GoTo ErrorHandler
@@ -518,9 +518,9 @@ Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
         Exit Sub
     End If
     
-    ' Utiliser la fonction directe sans jointures problématiques
+    ' Utiliser la fonction corrigée
     Dim donneesREE As TypeDonneesREE
-    donneesREE = RecupererNumeroReceptionDirect(numeroSerie)
+    donneesREE = RecupererNumeroReceptionAvecArtCode(numeroSerie)
     
     If donneesREE.trouve Then
         ' Numéro de réception trouvé
@@ -542,6 +542,7 @@ Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
         On Error GoTo 0
         
         MsgBox "Aucun numéro de réception trouvé." & vbCrLf & _
+               "Erreur: " & donneesREE.messageErreur & vbCrLf & _
                "Saisie manuelle requise.", _
                vbExclamation, "Saisie manuelle requise"
     End If
@@ -552,3 +553,4 @@ ErrorHandler:
     MsgBox "Erreur lors de la récupération du numéro de réception :" & vbCrLf & _
            Err.description, vbCritical
 End Sub
+

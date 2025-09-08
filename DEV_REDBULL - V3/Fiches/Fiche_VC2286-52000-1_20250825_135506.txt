@@ -1,0 +1,16 @@
+=== FICHE RETOUR SAV RED BULL ===
+Référence: VC2286-52000-1
+Date: 25/08/2025 13:55:06
+Type problème: Mécanique
+Décision: HORS SERVICE
+
+Informations frigo:
+??? RÉFRIGÉRATEUR VITRINE - Modèle VC2286
+  ?? Capacité: 250L
+  ??? Température: +2°C à +8°C
+  ?? Composants: Compresseur, LED, Vitre, Thermostat
+  ?? Fabrication: 2023
+  ??? Garantie: 24 mois
+  ?? Prix neuf: 1,250€
+
+Fichier créé par: SAV Red Bull Scanner Pro v2.1

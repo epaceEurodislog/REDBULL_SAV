@@ -1,0 +1,16 @@
+=== INFORMATIONS SYSTÈME ===
+Application: SAV Red Bull Scanner Pro v2.1
+Chemin: C:\Users\BDEQUEKER\OneDrive\Bureau\Eurodislog 2024-2025\REDBULL_SAV\REDBULL_SAV\DEV_REDBULL - V2
+Date système: 04/09/2025 11:14:05
+Utilisateur: Enzo PACE
+Ordinateur: BDEQUEKER2
+Base de données: DÉCONNECTÉE
+Serveur BDD: 192.168.9.12
+Base: SPEED_V6
+
+=== REQUÊTE SQL UTILISÉE ===
+SELECT art.art_code, art.art_desl, nse.nse_nums
+FROM ART_PAR as art LEFT OUTER JOIN nse_dat as nse
+ON nse.act_code = art.act_code AND nse.art_code = art.art_code
+AND nse.act_code = 'RB'
+

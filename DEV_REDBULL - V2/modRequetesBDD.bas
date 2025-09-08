@@ -282,7 +282,6 @@ ErrorHandler:
 End Function
 
 
-' Fonction corrigée avec gestion des types de données
 Public Function RecupererNumeroReceptionAvecArtCode(numeroSerie As String) As TypeDonneesREE
     On Error GoTo ErrorHandler
     
@@ -327,21 +326,72 @@ Public Function RecupererNumeroReceptionAvecArtCode(numeroSerie As String) As Ty
     
     Debug.Print "ART_CODE: " & artCode & ", STK_NoSU: " & stkNoSU
     
-    ' ÉTAPE 2 : Chercher dans REL_DAT avec les valeurs exactes
+    ' ÉTAPE 2 : Chercher dans REL_DAT avec gestion des types
     Dim sqlEtape2 As String
     Dim rsEtape2 As ADODB.Recordset
     
-    ' CORRECTION : Utiliser les mêmes types de données et éviter les conversions
+    ' Essayer d'abord la comparaison numérique directe
     sqlEtape2 = "SELECT REE_NORE " & _
                 "FROM REL_DAT " & _
                 "WHERE ACT_CODE = 'RB' " & _
                 "AND ART_CODE = '" & artCode & "' " & _
-                "AND LTRIM(RTRIM(STR(REL_NoSU))) = '" & stkNoSU & "' " & _
+                "AND REL_NoSU = " & stkNoSU & " " & _
                 "AND REE_NORE IS NOT NULL " & _
                 "AND REE_NORE <> ''"
     
     Set rsEtape2 = New ADODB.Recordset
+    
+    ' Tentative 1 : Comparaison numérique
+    On Error Resume Next
     rsEtape2.Open sqlEtape2, conn, adOpenStatic, adLockReadOnly
+    
+    If Err.Number <> 0 Then
+        ' Erreur de conversion, essayer avec conversion string
+        On Error GoTo ErrorHandler
+        
+        If rsEtape2.State = adStateOpen Then rsEtape2.Close
+        Set rsEtape2 = Nothing
+        
+        ' Tentative 2 : Conversion avec STR()
+        sqlEtape2 = "SELECT REE_NORE " & _
+                    "FROM REL_DAT " & _
+                    "WHERE ACT_CODE = 'RB' " & _
+                    "AND ART_CODE = '" & artCode & "' " & _
+                    "AND LTRIM(RTRIM(STR(REL_NoSU))) = '" & stkNoSU & "' " & _
+                    "AND REE_NORE IS NOT NULL " & _
+                    "AND REE_NORE <> ''"
+        
+        Set rsEtape2 = New ADODB.Recordset
+        
+        On Error Resume Next
+        rsEtape2.Open sqlEtape2, conn, adOpenStatic, adLockReadOnly
+        
+        If Err.Number <> 0 Then
+            ' Tentative 3 : Conversion avec CAST
+            On Error GoTo ErrorHandler
+            
+            If rsEtape2.State = adStateOpen Then rsEtape2.Close
+            Set rsEtape2 = Nothing
+            
+            sqlEtape2 = "SELECT REE_NORE " & _
+                        "FROM REL_DAT " & _
+                        "WHERE ACT_CODE = 'RB' " & _
+                        "AND ART_CODE = '" & artCode & "' " & _
+                        "AND CAST(REL_NoSU AS VARCHAR(50)) = '" & stkNoSU & "' " & _
+                        "AND REE_NORE IS NOT NULL " & _
+                        "AND REE_NORE <> ''"
+            
+            Set rsEtape2 = New ADODB.Recordset
+            rsEtape2.Open sqlEtape2, conn, adOpenStatic, adLockReadOnly
+            Debug.Print "Utilisation CAST pour comparaison"
+        Else
+            Debug.Print "Utilisation STR() pour comparaison"
+        End If
+    Else
+        Debug.Print "Comparaison numérique directe réussie"
+    End If
+    
+    On Error GoTo ErrorHandler
     
     If Not rsEtape2.EOF Then
         With resultats
@@ -496,6 +546,217 @@ ErrorHandler:
     resultats.trouve = False
     resultats.messageErreur = "ERREUR BDD: " & Err.description
     RecupererNumeroReceptionDirect = resultats
+    
+    If Not rs Is Nothing Then
+        If rs.State = adStateOpen Then rs.Close
+        Set rs = Nothing
+    End If
+End Function
+
+' Fonction pour récupérer le numéro de réception en étendant votre requête de base
+Public Function RecupererReceptionOptimisee(numeroSerie As String) As TypeDonneesREE
+    On Error GoTo ErrorHandler
+    
+    Dim resultats As TypeDonneesREE
+    resultats.trouve = False
+    resultats.numeroReception = ""
+    resultats.numeroEnlevement = ""
+    resultats.messageErreur = ""
+    
+    If Not Reconnecter() Then
+        resultats.messageErreur = "CONNEXION BDD IMPOSSIBLE"
+        RecupererReceptionOptimisee = resultats
+        Exit Function
+    End If
+    
+    ' ÉTAPE 1 : Utiliser votre requête de base pour valider et récupérer l'ART_CODE
+    Dim sqlEtape1 As String
+    Dim rsEtape1 As ADODB.Recordset
+    Dim artCodeTrouve As String
+    
+    sqlEtape1 = "SELECT DISTINCT art.art_code, art.art_desl, nse.nse_nums " & _
+                "FROM ART_PAR as art " & _
+                "INNER JOIN nse_dat as nse ON " & _
+                "nse.act_code = art.act_code " & _
+                "AND nse.art_code = art.art_code " & _
+                "AND nse.act_code = 'RB' " & _
+                "WHERE nse.nse_nums = '" & numeroSerie & "' " & _
+                "AND nse.nse_nums IS NOT NULL " & _
+                "AND nse.nse_nums <> '' " & _
+                "AND LEN(LTRIM(RTRIM(nse.nse_nums))) > 0 " & _
+                "AND art.art_code IN (" & CODES_ARTICLES_AUTORISES & ")"
+    
+    Set rsEtape1 = New ADODB.Recordset
+    rsEtape1.Open sqlEtape1, conn, adOpenStatic, adLockReadOnly
+    
+    If rsEtape1.EOF Then
+        resultats.messageErreur = "Numéro de série non autorisé ou non trouvé dans les 92 codes"
+        rsEtape1.Close
+        Set rsEtape1 = Nothing
+        RecupererReceptionOptimisee = resultats
+        Exit Function
+    End If
+    
+    ' Récupérer l'ART_CODE validé
+    artCodeTrouve = IIf(IsNull(rsEtape1!ART_CODE), "", Trim(rsEtape1!ART_CODE))
+    rsEtape1.Close
+    Set rsEtape1 = Nothing
+    
+    Debug.Print "ART_CODE autorisé trouvé : " & artCodeTrouve & " pour série : " & numeroSerie
+    
+    ' ÉTAPE 2 : Étendre la recherche pour récupérer le numéro de réception
+    Dim sqlEtape2 As String
+    Dim rsEtape2 As ADODB.Recordset
+    
+    ' Requête étendue qui inclut la jointure avec REL_DAT pour récupérer REE_NORE
+    sqlEtape2 = "SELECT DISTINCT art.art_code, art.art_desl, nse.nse_nums, nse.STK_NoSU, rel.REE_NORE " & _
+                "FROM ART_PAR as art " & _
+                "INNER JOIN nse_dat as nse ON " & _
+                "nse.act_code = art.act_code " & _
+                "AND nse.art_code = art.art_code " & _
+                "AND nse.act_code = 'RB' " & _
+                "LEFT JOIN REL_DAT as rel ON " & _
+                "rel.act_code = 'RB' " & _
+                "AND rel.art_code = art.art_code " & _
+                "AND rel.REL_NoSU = nse.STK_NoSU " & _
+                "WHERE nse.nse_nums = '" & numeroSerie & "' " & _
+                "AND nse.nse_nums IS NOT NULL " & _
+                "AND nse.nse_nums <> '' " & _
+                "AND LEN(LTRIM(RTRIM(nse.nse_nums))) > 0 " & _
+                "AND art.art_code = '" & artCodeTrouve & "' " & _
+                "AND rel.REE_NORE IS NOT NULL " & _
+                "AND rel.REE_NORE <> ''"
+    
+    Set rsEtape2 = New ADODB.Recordset
+    rsEtape2.Open sqlEtape2, conn, adOpenStatic, adLockReadOnly
+    
+    If Not rsEtape2.EOF Then
+        ' Numéro de réception trouvé
+        With resultats
+            .trouve = True
+            .numeroReception = IIf(IsNull(rsEtape2!REE_NORE), "", Trim(rsEtape2!REE_NORE))
+            .numeroEnlevement = ""
+            .messageErreur = ""
+        End With
+        
+        Debug.Print "REE_NORE trouvé : " & resultats.numeroReception & " pour ART_CODE : " & artCodeTrouve
+    Else
+        ' Aucun numéro de réception trouvé pour cet article autorisé
+        resultats.messageErreur = "Article autorisé mais aucun numéro de réception REE_NORE trouvé"
+        Debug.Print "Aucun REE_NORE pour ART_CODE autorisé : " & artCodeTrouve
+    End If
+    
+    rsEtape2.Close
+    Set rsEtape2 = Nothing
+    
+    RecupererReceptionOptimisee = resultats
+    Exit Function
+    
+ErrorHandler:
+    resultats.trouve = False
+    resultats.messageErreur = "ERREUR BDD: " & Err.description
+    RecupererReceptionOptimisee = resultats
+    
+    ' Nettoyage des objets
+    If Not rsEtape1 Is Nothing Then
+        If rsEtape1.State = adStateOpen Then rsEtape1.Close
+        Set rsEtape1 = Nothing
+    End If
+    
+    If Not rsEtape2 Is Nothing Then
+        If rsEtape2.State = adStateOpen Then rsEtape2.Close
+        Set rsEtape2 = Nothing
+    End If
+End Function
+
+' Version alternative avec une seule requête complexe (plus efficace)
+Public Function RecupererReceptionUnifie(numeroSerie As String) As TypeDonneesREE
+    On Error GoTo ErrorHandler
+    
+    Dim resultats As TypeDonneesREE
+    resultats.trouve = False
+    resultats.numeroReception = ""
+    resultats.numeroEnlevement = ""
+    resultats.messageErreur = ""
+    
+    If Not Reconnecter() Then
+        resultats.messageErreur = "CONNEXION BDD IMPOSSIBLE"
+        RecupererReceptionUnifie = resultats
+        Exit Function
+    End If
+    
+    ' Requête unifiée basée sur votre requête de base + jointure REL_DAT
+    Dim sql As String
+    Dim rs As ADODB.Recordset
+    
+    sql = "SELECT DISTINCT art.art_code, art.art_desl, nse.nse_nums, rel.REE_NORE " & _
+          "FROM ART_PAR as art " & _
+          "INNER JOIN nse_dat as nse ON " & _
+          "nse.act_code = art.act_code " & _
+          "AND nse.art_code = art.art_code " & _
+          "AND nse.act_code = 'RB' " & _
+          "LEFT JOIN REL_DAT as rel ON " & _
+          "rel.act_code = 'RB' " & _
+          "AND rel.art_code = art.art_code " & _
+          "AND rel.REL_NoSU = nse.STK_NoSU " & _
+          "WHERE nse.nse_nums = '" & numeroSerie & "' " & _
+          "AND nse.nse_nums IS NOT NULL " & _
+          "AND nse.nse_nums <> '' " & _
+          "AND LEN(LTRIM(RTRIM(nse.nse_nums))) > 0 " & _
+          "AND art.art_code IN (" & CODES_ARTICLES_AUTORISES & ") " & _
+          "AND rel.REE_NORE IS NOT NULL " & _
+          "AND rel.REE_NORE <> '' " & _
+          "ORDER BY art.art_code"
+    
+    Set rs = New ADODB.Recordset
+    rs.Open sql, conn, adOpenStatic, adLockReadOnly
+    
+    If Not rs.EOF Then
+        ' Données trouvées
+        With resultats
+            .trouve = True
+            .numeroReception = IIf(IsNull(rs!REE_NORE), "", Trim(rs!REE_NORE))
+            .numeroEnlevement = ""
+            .messageErreur = ""
+        End With
+        
+        Debug.Print "Requête unifiée réussie - REE_NORE : " & resultats.numeroReception & " pour série : " & numeroSerie
+    Else
+        ' Vérifier si le numéro de série existe mais sans REE_NORE
+        rs.Close
+        Set rs = Nothing
+        
+        ' Requête de vérification sans REL_DAT
+        Dim sqlVerif As String
+        sqlVerif = "SELECT DISTINCT art.art_code, nse.nse_nums " & _
+                   "FROM ART_PAR as art " & _
+                   "INNER JOIN nse_dat as nse ON " & _
+                   "nse.act_code = art.act_code " & _
+                   "AND nse.art_code = art.art_code " & _
+                   "AND nse.act_code = 'RB' " & _
+                   "WHERE nse.nse_nums = '" & numeroSerie & "' " & _
+                   "AND art.art_code IN (" & CODES_ARTICLES_AUTORISES & ")"
+        
+        Set rs = New ADODB.Recordset
+        rs.Open sqlVerif, conn, adOpenStatic, adLockReadOnly
+        
+        If Not rs.EOF Then
+            resultats.messageErreur = "Numéro de série autorisé mais aucun REE_NORE associé"
+        Else
+            resultats.messageErreur = "Numéro de série non autorisé (hors liste des 92 codes)"
+        End If
+    End If
+    
+    rs.Close
+    Set rs = Nothing
+    
+    RecupererReceptionUnifie = resultats
+    Exit Function
+    
+ErrorHandler:
+    resultats.trouve = False
+    resultats.messageErreur = "ERREUR BDD: " & Err.description
+    RecupererReceptionUnifie = resultats
     
     If Not rs Is Nothing Then
         If rs.State = adStateOpen Then rs.Close

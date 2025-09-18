@@ -1,0 +1,16 @@
+=== REQUÊTE SQL UTILISÉE DANS L'APPLICATION ===
+
+SELECT DISTINCT art.art_code, art.art_desl, nse.nse_nums
+FROM ART_PAR as art
+INNER JOIN nse_dat as nse ON
+nse.act_code = art.act_code AND nse.art_code = art.art_code
+AND nse.act_code = 'RB'
+
+=== DESCRIPTION ===
+
+Cette requête récupère :
+- art_code : Code de l'article
+- art_desl : Désignation de l'article
+- nse_nums : Numéro de série de l'équipement
+Filtré sur act_code = 'RB' pour Red Bull uniquement
+Et sur 92 codes articles autorisés

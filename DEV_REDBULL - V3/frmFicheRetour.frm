@@ -22,18 +22,20 @@ Private WithEvents cmdValider As CommandButton
 Attribute cmdValider.VB_VarHelpID = -1
 Private WithEvents cmdAnnuler As CommandButton
 Attribute cmdAnnuler.VB_VarHelpID = -1
-Private WithEvents optMecanique As OptionButton
-Attribute optMecanique.VB_VarHelpID = -1
-Private WithEvents optEsthetique As OptionButton
-Attribute optEsthetique.VB_VarHelpID = -1
-Private WithEvents optCoherenceOui As OptionButton
-Attribute optCoherenceOui.VB_VarHelpID = -1
-Private WithEvents optCoherenceNon As OptionButton
-Attribute optCoherenceNon.VB_VarHelpID = -1
-Private WithEvents optReparable As OptionButton
-Attribute optReparable.VB_VarHelpID = -1
-Private WithEvents optHS As OptionButton
-Attribute optHS.VB_VarHelpID = -1
+
+' Remplacement des OptionButton par des CheckBox
+Private WithEvents chkMecanique As CheckBox
+Attribute chkMecanique.VB_VarHelpID = -1
+Private WithEvents chkEsthetique As CheckBox
+Attribute chkEsthetique.VB_VarHelpID = -1
+Private WithEvents chkCoherenceOui As CheckBox
+Attribute chkCoherenceOui.VB_VarHelpID = -1
+Private WithEvents chkCoherenceNon As CheckBox
+Attribute chkCoherenceNon.VB_VarHelpID = -1
+Private WithEvents chkReparable As CheckBox
+Attribute chkReparable.VB_VarHelpID = -1
+Private WithEvents chkHS As CheckBox
+Attribute chkHS.VB_VarHelpID = -1
 
 ' Variable pour éviter les boucles infinies lors de la création
 Private creationEnCours As Boolean
@@ -144,24 +146,20 @@ Private Sub CreerInterfaceFiche()
     ctrl.BorderStyle = 1
     ctrl.Visible = True
     
-    ' GROUPE MOTIF - Créer les deux ensemble
-    Set optMecanique = Me.Controls.Add("VB.OptionButton", "optMecanique")
-    optMecanique.Left = 2600
-    optMecanique.Top = 2500
-    optMecanique.Width = 1500
-    optMecanique.Caption = "MECANIQUE"
-    optMecanique.Visible = True
+    ' GROUPE MOTIF - Remplacé par des CheckBox
+    Set chkMecanique = Me.Controls.Add("VB.CheckBox", "chkMecanique")
+    chkMecanique.Left = 2600
+    chkMecanique.Top = 2500
+    chkMecanique.Width = 1500
+    chkMecanique.Caption = "MECANIQUE"
+    chkMecanique.Visible = True
     
-    Set optEsthetique = Me.Controls.Add("VB.OptionButton", "optEsthetique")
-    optEsthetique.Left = 4200
-    optEsthetique.Top = 2500
-    optEsthetique.Width = 1500
-    optEsthetique.Caption = "ESTHETIQUE"
-    optEsthetique.Visible = True
-    
-    ' Définir les valeurs après création
-    optMecanique.Value = True
-    optEsthetique.Value = False
+    Set chkEsthetique = Me.Controls.Add("VB.CheckBox", "chkEsthetique")
+    chkEsthetique.Left = 4200
+    chkEsthetique.Top = 2500
+    chkEsthetique.Width = 1500
+    chkEsthetique.Caption = "ESTHETIQUE"
+    chkEsthetique.Visible = True
     
     ' COHERENCE AVEC LA BOUTIQUE - TITRE
     Set ctrl = Me.Controls.Add("VB.Label", "lblCoherenceTitre")
@@ -173,24 +171,20 @@ Private Sub CreerInterfaceFiche()
     ctrl.BorderStyle = 1
     ctrl.Visible = True
     
-    ' GROUPE COHERENCE - Créer les deux ensemble
-    Set optCoherenceOui = Me.Controls.Add("VB.OptionButton", "optCoherenceOui")
-    optCoherenceOui.Left = 3100
-    optCoherenceOui.Top = 3000
-    optCoherenceOui.Width = 600
-    optCoherenceOui.Caption = "OUI"
-    optCoherenceOui.Visible = True
+    ' GROUPE COHERENCE - Remplacé par des CheckBox
+    Set chkCoherenceOui = Me.Controls.Add("VB.CheckBox", "chkCoherenceOui")
+    chkCoherenceOui.Left = 3100
+    chkCoherenceOui.Top = 3000
+    chkCoherenceOui.Width = 600
+    chkCoherenceOui.Caption = "OUI"
+    chkCoherenceOui.Visible = True
     
-    Set optCoherenceNon = Me.Controls.Add("VB.OptionButton", "optCoherenceNon")
-    optCoherenceNon.Left = 4000
-    optCoherenceNon.Top = 3000
-    optCoherenceNon.Width = 800
-    optCoherenceNon.Caption = "NON"
-    optCoherenceNon.Visible = True
-    
-    ' Définir les valeurs après création
-    optCoherenceOui.Value = True
-    optCoherenceNon.Value = False
+    Set chkCoherenceNon = Me.Controls.Add("VB.CheckBox", "chkCoherenceNon")
+    chkCoherenceNon.Left = 4000
+    chkCoherenceNon.Top = 3000
+    chkCoherenceNon.Width = 800
+    chkCoherenceNon.Caption = "NON"
+    chkCoherenceNon.Visible = True
     
     ' DIAGNOSTIC
     Set ctrl = Me.Controls.Add("VB.Label", "lblDiagnostic")
@@ -218,7 +212,7 @@ Private Sub CreerInterfaceFiche()
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRayures")
     ctrl.Left = 500
     ctrl.Top = 4900
-    ctrl.Width = 2000
+    ctrl.Width = 3500
     ctrl.Caption = "RAYURES TROP IMPORTANTES"
     ctrl.Visible = True
     
@@ -239,116 +233,69 @@ Private Sub CreerInterfaceFiche()
     Set ctrl = Me.Controls.Add("VB.CheckBox", "chkBonEtat")
     ctrl.Left = 500
     ctrl.Top = 6150
-    ctrl.Width = 3000
+    ctrl.Width = 3500
     ctrl.Caption = "BON ETAT -> REMIS DANS LE CIRCUIT"
     ctrl.Visible = True
     
-    ' REPARE / RECUPERE
-    Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRepare")
-    ctrl.Left = 500
-    ctrl.Top = 6600
-    ctrl.Width = 1500
-    ctrl.Caption = "REPARE :"
-    ctrl.Visible = True
-    
-    Set ctrl = Me.Controls.Add("VB.TextBox", "txtTempsRepare")
-    ctrl.Left = 2500
-    ctrl.Top = 6600
-    ctrl.Width = 1000
-    ctrl.Height = 300
-    ctrl.Visible = True
-    
-    Set ctrl = Me.Controls.Add("VB.Label", "lblTempsPasseRepare")
-    ctrl.Left = 3600
-    ctrl.Top = 6600
-    ctrl.Width = 1200
-    ctrl.Caption = "/ TEMPS PASSE :"
-    ctrl.Visible = True
-    
-    Set ctrl = Me.Controls.Add("VB.CheckBox", "chkRecupere")
-    ctrl.Left = 500
-    ctrl.Top = 7100
-    ctrl.Width = 1500
-    ctrl.Caption = "RECUPERE :"
-    ctrl.Visible = True
-    
-    Set ctrl = Me.Controls.Add("VB.TextBox", "txtTempsRecupere")
-    ctrl.Left = 2500
-    ctrl.Top = 7100
-    ctrl.Width = 1000
-    ctrl.Height = 300
-    ctrl.Visible = True
-    
-    Set ctrl = Me.Controls.Add("VB.Label", "lblTempsPasseRecupere")
-    ctrl.Left = 3600
-    ctrl.Top = 7100
-    ctrl.Width = 1200
-    ctrl.Caption = "/ TEMPS PASSE :"
-    ctrl.Visible = True
-    
-    ' N° SERIE
+    ' N° SERIE - REPOSITIONNÉ
     Set ctrl = Me.Controls.Add("VB.Label", "lblSerie")
     ctrl.Left = 500
-    ctrl.Top = 7700
+    ctrl.Top = 6600
     ctrl.Width = 1200
     ctrl.Caption = "N° SERIE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtSerie")
     ctrl.Left = 1800
-    ctrl.Top = 7700
+    ctrl.Top = 6600
     ctrl.Width = 2000
     ctrl.Height = 300
     ctrl.Visible = True
     
-    ' COMMENTAIRE
+    ' COMMENTAIRE - REPOSITIONNÉ
     Set ctrl = Me.Controls.Add("VB.Label", "lblCommentaire")
     ctrl.Left = 500
-    ctrl.Top = 8200
+    ctrl.Top = 7100
     ctrl.Width = 1500
     ctrl.Caption = "COMMENTAIRE :"
     ctrl.Visible = True
     
     Set ctrl = Me.Controls.Add("VB.TextBox", "txtCommentaire")
     ctrl.Left = 500
-    ctrl.Top = 8600
+    ctrl.Top = 7500
     ctrl.Width = 6000
     ctrl.Height = 300
     ctrl.Visible = True
     
-    ' QUALITE - TITRE
+    ' QUALITE - TITRE - REPOSITIONNÉ
     Set ctrl = Me.Controls.Add("VB.Label", "lblQualiteTitre")
     ctrl.Left = 500
-    ctrl.Top = 9100
+    ctrl.Top = 8000
     ctrl.Width = 1200
     ctrl.Caption = "QUALITE :"
     ctrl.BackColor = RGB(220, 220, 220)
     ctrl.BorderStyle = 1
     ctrl.Visible = True
     
-    ' GROUPE QUALITE - Créer les deux ensemble
-    Set optReparable = Me.Controls.Add("VB.OptionButton", "optReparable")
-    optReparable.Left = 1800
-    optReparable.Top = 9100
-    optReparable.Width = 1500
-    optReparable.Caption = "REPARABLE"
-    optReparable.Visible = True
+    ' GROUPE QUALITE - Remplacé par des CheckBox - REPOSITIONNÉ
+    Set chkReparable = Me.Controls.Add("VB.CheckBox", "chkReparable")
+    chkReparable.Left = 1800
+    chkReparable.Top = 8000
+    chkReparable.Width = 1500
+    chkReparable.Caption = "REPARABLE"
+    chkReparable.Visible = True
     
-    Set optHS = Me.Controls.Add("VB.OptionButton", "optHS")
-    optHS.Left = 3500
-    optHS.Top = 9100
-    optHS.Width = 1000
-    optHS.Caption = "HS"
-    optHS.Visible = True
+    Set chkHS = Me.Controls.Add("VB.CheckBox", "chkHS")
+    chkHS.Left = 3500
+    chkHS.Top = 8000
+    chkHS.Width = 1000
+    chkHS.Caption = "HS"
+    chkHS.Visible = True
     
-    ' Définir les valeurs après création
-    optReparable.Value = True
-    optHS.Value = False
-    
-    ' Boutons
+    ' Boutons - REPOSITIONNÉS
     Set cmdValider = Me.Controls.Add("VB.CommandButton", "cmdValider")
     cmdValider.Left = 2000
-    cmdValider.Top = 9800
+    cmdValider.Top = 8700
     cmdValider.Width = 1800
     cmdValider.Height = 400
     cmdValider.Caption = "VALIDER FICHE"
@@ -357,7 +304,7 @@ Private Sub CreerInterfaceFiche()
     
     Set cmdAnnuler = Me.Controls.Add("VB.CommandButton", "cmdAnnuler")
     cmdAnnuler.Left = 4000
-    cmdAnnuler.Top = 9800
+    cmdAnnuler.Top = 8700
     cmdAnnuler.Width = 1800
     cmdAnnuler.Height = 400
     cmdAnnuler.Caption = "ANNULER"
@@ -365,61 +312,69 @@ Private Sub CreerInterfaceFiche()
     cmdAnnuler.Visible = True
 End Sub
 
-' GESTION MANUELLE DES GROUPES - GROUPE MOTIF
-Private Sub optMecanique_Click()
+' GESTION DES GROUPES EXCLUSIFS - GROUPE MOTIF
+Private Sub chkMecanique_Click()
     If creationEnCours Then Exit Sub
-    If optMecanique.Value = True Then
-        If Not optEsthetique Is Nothing Then optEsthetique.Value = False
+    If chkMecanique.Value = 1 Then
+        If Not chkEsthetique Is Nothing Then chkEsthetique.Value = 0
     End If
 End Sub
 
-Private Sub optEsthetique_Click()
+Private Sub chkEsthetique_Click()
     If creationEnCours Then Exit Sub
-    If optEsthetique.Value = True Then
-        If Not optMecanique Is Nothing Then optMecanique.Value = False
+    If chkEsthetique.Value = 1 Then
+        If Not chkMecanique Is Nothing Then chkMecanique.Value = 0
     End If
 End Sub
 
-' GESTION MANUELLE DES GROUPES - GROUPE COHERENCE
-Private Sub optCoherenceOui_Click()
+' GESTION DES GROUPES EXCLUSIFS - GROUPE COHERENCE
+Private Sub chkCoherenceOui_Click()
     If creationEnCours Then Exit Sub
-    If optCoherenceOui.Value = True Then
-        If Not optCoherenceNon Is Nothing Then optCoherenceNon.Value = False
+    If chkCoherenceOui.Value = 1 Then
+        If Not chkCoherenceNon Is Nothing Then chkCoherenceNon.Value = 0
     End If
 End Sub
 
-Private Sub optCoherenceNon_Click()
+Private Sub chkCoherenceNon_Click()
     If creationEnCours Then Exit Sub
-    If optCoherenceNon.Value = True Then
-        If Not optCoherenceOui Is Nothing Then optCoherenceOui.Value = False
+    If chkCoherenceNon.Value = 1 Then
+        If Not chkCoherenceOui Is Nothing Then chkCoherenceOui.Value = 0
     End If
 End Sub
 
-' GESTION MANUELLE DES GROUPES - GROUPE QUALITE
-Private Sub optReparable_Click()
+' GESTION DES GROUPES EXCLUSIFS - GROUPE QUALITE
+Private Sub chkReparable_Click()
     If creationEnCours Then Exit Sub
-    If optReparable.Value = True Then
-        If Not optHS Is Nothing Then optHS.Value = False
+    If chkReparable.Value = 1 Then
+        If Not chkHS Is Nothing Then chkHS.Value = 0
     End If
 End Sub
 
-Private Sub optHS_Click()
+Private Sub chkHS_Click()
     If creationEnCours Then Exit Sub
-    If optHS.Value = True Then
-        If Not optReparable Is Nothing Then optReparable.Value = False
+    If chkHS.Value = 1 Then
+        If Not chkReparable Is Nothing Then chkReparable.Value = 0
     End If
 End Sub
+
+' === MODIFICATION DANS frmFicheRetour.frm ===
+' Remplacer la méthode cmdValider_Click() existante par cette version :
 
 Private Sub cmdValider_Click()
     If Not ValiderFormulaire() Then Exit Sub
     
     Dim statut As String
-    If optHS.Value = True Then
+    If chkHS.Value = 1 Then
         statut = "HS"
-    Else
+    ElseIf chkReparable.Value = 1 Then
         statut = "REPARABLE"
+    Else
+        ' Aucune qualité sélectionnée - ne devrait pas arriver avec la validation
+        MsgBox "Erreur : Aucune qualité sélectionnée !", vbCritical
+        Exit Sub
     End If
     
+    ' Sauvegarder d'abord la fiche
     SauvegarderFiche statut
     
     If statut = "HS" Then
@@ -430,14 +385,23 @@ Private Sub cmdValider_Click()
         frmRecuperationPieces.InitialiserAvecFrigo referenceFrigo, "Nom_Frigoriste"
         frmRecuperationPieces.Show vbModal
         
-    Else
-        MsgBox "Fiche sauvegardée - Frigo marqué REPARABLE" & vbCrLf & "Frigo envoyé en réparation", vbInformation
+    ElseIf statut = "REPARABLE" Then
+        MsgBox "Fiche sauvegardée - Frigo marqué REPARABLE" & vbCrLf & "Ouverture de l'affectation des pièces", vbInformation
+        
+        ' CORRECTION : Nom correct du formulaire et ordre des opérations
+        Load frmAffectationPieces
+        frmAffectationPieces.InitialiserAvecFrigo referenceFrigo, numeroSerieFrigo, "Nom_Frigoriste"
+        frmAffectationPieces.Show vbModal
+        
+        ' Une fois l'affectation terminée, confirmer
+        MsgBox "Processus d'affectation terminé." & vbCrLf & "Le frigo est maintenant en cours de réparation.", vbInformation
     End If
     
     Me.Hide
 End Sub
 
 Private Function ValiderFormulaire() As Boolean
+    ' Validation des champs obligatoires
     If Len(Trim(Me.Controls("txtEnlevement").Text)) = 0 Then
         MsgBox "Veuillez saisir le numéro d'enlèvement !", vbExclamation
         ValiderFormulaire = False
@@ -446,6 +410,51 @@ Private Function ValiderFormulaire() As Boolean
     
     If Len(Trim(Me.Controls("txtReception").Text)) = 0 Then
         MsgBox "Veuillez saisir le numéro de réception !", vbExclamation
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    ' VALIDATION DES GROUPES EXCLUSIFS
+    
+    ' 1. Vérification MOTIF : Mécanique ET Esthétique ne peuvent pas être cochés ensemble
+    If chkMecanique.Value = 1 And chkEsthetique.Value = 1 Then
+        MsgBox "ERREUR : Vous ne pouvez pas sélectionner MECANIQUE et ESTHETIQUE en même temps !" & vbCrLf & _
+               "Veuillez ne choisir qu'un seul motif de retour.", vbExclamation + vbCritical, "Sélection invalide"
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    ' 2. Vérification COHERENCE : OUI ET NON ne peuvent pas être cochés ensemble
+    If chkCoherenceOui.Value = 1 And chkCoherenceNon.Value = 1 Then
+        MsgBox "ERREUR : Vous ne pouvez pas sélectionner OUI et NON en même temps pour la cohérence !" & vbCrLf & _
+               "Veuillez choisir une seule option.", vbExclamation + vbCritical, "Sélection invalide"
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    ' 3. Vérification QUALITE : REPARABLE ET HS ne peuvent pas être cochés ensemble
+    If chkReparable.Value = 1 And chkHS.Value = 1 Then
+        MsgBox "ERREUR : Vous ne pouvez pas sélectionner REPARABLE et HS en même temps !" & vbCrLf & _
+               "Veuillez choisir une seule option de qualité.", vbExclamation + vbCritical, "Sélection invalide"
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    ' 4. Vérification qu'au moins une option est sélectionnée pour chaque groupe obligatoire
+    If chkMecanique.Value = 0 And chkEsthetique.Value = 0 Then
+        MsgBox "ATTENTION : Veuillez sélectionner un motif de retour (MECANIQUE ou ESTHETIQUE).", vbExclamation
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    If chkCoherenceOui.Value = 0 And chkCoherenceNon.Value = 0 Then
+        MsgBox "ATTENTION : Veuillez indiquer la cohérence avec la boutique (OUI ou NON).", vbExclamation
+        ValiderFormulaire = False
+        Exit Function
+    End If
+    
+    If chkReparable.Value = 0 And chkHS.Value = 0 Then
+        MsgBox "ATTENTION : Veuillez indiquer la qualité du frigo (REPARABLE ou HS).", vbExclamation
         ValiderFormulaire = False
         Exit Function
     End If
@@ -473,12 +482,12 @@ Private Sub SauvegarderFiche(statut As String)
     Print #numeroFichier, "REFERENCE: " & Me.Controls("txtReference").Text
     Print #numeroFichier, ""
     Print #numeroFichier, "MOTIF DU RETOUR:"
-    If optMecanique.Value Then Print #numeroFichier, "- MECANIQUE"
-    If optEsthetique.Value Then Print #numeroFichier, "- ESTHETIQUE"
+    If chkMecanique.Value = 1 Then Print #numeroFichier, "- MECANIQUE"
+    If chkEsthetique.Value = 1 Then Print #numeroFichier, "- ESTHETIQUE"
     Print #numeroFichier, ""
     Print #numeroFichier, "COHERENCE AVEC LA BOUTIQUE:"
-    If optCoherenceOui.Value Then Print #numeroFichier, "- OUI"
-    If optCoherenceNon.Value Then Print #numeroFichier, "- NON"
+    If chkCoherenceOui.Value = 1 Then Print #numeroFichier, "- OUI"
+    If chkCoherenceNon.Value = 1 Then Print #numeroFichier, "- NON"
     Print #numeroFichier, ""
     Print #numeroFichier, "DIAGNOSTIC:"
     If Me.Controls("chkPieceManquante").Value = 1 Then Print #numeroFichier, "- PIECE MANQUANTE"
@@ -488,13 +497,13 @@ Private Sub SauvegarderFiche(statut As String)
     If Me.Controls("chkObsolete").Value = 1 Then Print #numeroFichier, "- OBSOLETE"
     If Me.Controls("chkBonEtat").Value = 1 Then Print #numeroFichier, "- BON ETAT"
     Print #numeroFichier, ""
-    If Me.Controls("chkRepare").Value = 1 Then Print #numeroFichier, "REPARE - Temps: " & Me.Controls("txtTempsRepare").Text
-    If Me.Controls("chkRecupere").Value = 1 Then Print #numeroFichier, "RECUPERE - Temps: " & Me.Controls("txtTempsRecupere").Text
     Print #numeroFichier, "N° SERIE: " & Me.Controls("txtSerie").Text
     Print #numeroFichier, "COMMENTAIRE: " & Me.Controls("txtCommentaire").Text
     Print #numeroFichier, ""
     Print #numeroFichier, "QUALITE: " & statut
     Print #numeroFichier, "Date création: " & Now
+    Print #numeroFichier, ""
+    Print #numeroFichier, "NOTE: Les temps de réparation/récupération seront saisis dans les formulaires dédiés."
     Close #numeroFichier
     
     Exit Sub
@@ -518,9 +527,9 @@ Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
         Exit Sub
     End If
     
-    ' Utiliser la fonction corrigée
+    ' UTILISER LA NOUVELLE FONCTION CORRIGÉE
     Dim donneesREE As TypeDonneesREE
-    donneesREE = RecupererNumeroReceptionAvecArtCode(numeroSerie)
+    donneesREE = RecupererNumeroReceptionCorrect(numeroSerie)
     
     If donneesREE.trouve Then
         ' Numéro de réception trouvé
@@ -541,9 +550,14 @@ Private Sub RecupererNumeroReceptionREE(numeroSerie As String)
         Me.Controls("txtReception").BackColor = RGB(255, 255, 255)
         On Error GoTo 0
         
+        ' AJOUTER UN DIAGNOSTIC AUTOMATIQUE
+        Debug.Print "=== DIAGNOSTIC AUTOMATIQUE ==="
+        DiagnostiquerProblemeREE numeroSerie
+        
         MsgBox "Aucun numéro de réception trouvé." & vbCrLf & _
                "Erreur: " & donneesREE.messageErreur & vbCrLf & _
-               "Saisie manuelle requise.", _
+               "Saisie manuelle requise." & vbCrLf & vbCrLf & _
+               "Vérifiez la fenêtre Debug pour plus de détails.", _
                vbExclamation, "Saisie manuelle requise"
     End If
     

@@ -790,3 +790,157 @@ ErrorHandler:
     End If
 End Function
 
+' === NOUVELLE FONCTION BASÉE SUR VOTRE REQUÊTE QUI FONCTIONNE ===
+' À ajouter dans modRequetesBDD.bas
+
+Public Function RecupererNumeroReceptionCorrect(numeroSerie As String) As TypeDonneesREE
+    On Error GoTo ErrorHandler
+    
+    Dim resultats As TypeDonneesREE
+    resultats.trouve = False
+    resultats.numeroReception = ""
+    resultats.numeroEnlevement = ""
+    resultats.messageErreur = ""
+    
+    If Not Reconnecter() Then
+        resultats.messageErreur = "CONNEXION BDD IMPOSSIBLE"
+        RecupererNumeroReceptionCorrect = resultats
+        Exit Function
+    End If
+    
+    ' UTILISATION EXACTE DE VOTRE REQUÊTE QUI FONCTIONNE
+    Dim sql As String
+    Dim rs As ADODB.Recordset
+    
+    sql = "SELECT REL.REE_NORE, NSE.NSE_NUMS, NSE.ART_CODE " & _
+          "FROM REL_DAT REL " & _
+          "JOIN NSE_DAT NSE ON NSE.ART_CODE = REL.ART_CODE " & _
+          "    AND REL.REL_NoSU = NSE.STK_NoSU " & _
+          "WHERE REL.ACT_CODE = 'RB' " & _
+          "    AND NSE.NSE_NUMS = '" & numeroSerie & "'"
+    
+    Debug.Print "SQL EXÉCUTÉ: " & sql
+    
+    Set rs = New ADODB.Recordset
+    rs.Open sql, conn, adOpenStatic, adLockReadOnly
+    
+    If Not rs.EOF Then
+        ' Vérifier que REE_NORE n'est pas null/vide
+        If Not IsNull(rs!REE_NORE) And Trim(CStr(rs!REE_NORE)) <> "" Then
+            With resultats
+                .trouve = True
+                .numeroReception = Trim(CStr(rs!REE_NORE))
+                .numeroEnlevement = ""
+                .messageErreur = ""
+            End With
+            
+            Debug.Print "REE_NORE trouvé : " & resultats.numeroReception & " pour série : " & numeroSerie
+        Else
+            resultats.messageErreur = "REE_NORE existe mais est vide ou null"
+            Debug.Print "REE_NORE vide pour : " & numeroSerie
+        End If
+    Else
+        resultats.messageErreur = "Aucun enregistrement trouvé avec cette jointure"
+        Debug.Print "Aucun résultat pour : " & numeroSerie
+    End If
+    
+    rs.Close
+    Set rs = Nothing
+    
+    RecupererNumeroReceptionCorrect = resultats
+    Exit Function
+    
+ErrorHandler:
+    resultats.trouve = False
+    resultats.messageErreur = "ERREUR BDD: " & Err.description
+    RecupererNumeroReceptionCorrect = resultats
+    
+    Debug.Print "ERREUR dans RecupererNumeroReceptionCorrect: " & Err.description
+    
+    If Not rs Is Nothing Then
+        If rs.State = adStateOpen Then rs.Close
+        Set rs = Nothing
+    End If
+End Function
+
+' === FONCTION DE DIAGNOSTIC POUR DÉBUGGER ===
+Public Sub DiagnostiquerProblemeREE(numeroSerie As String)
+    On Error GoTo ErrorHandler
+    
+    Debug.Print "=== DIAGNOSTIC REE_NORE POUR: " & numeroSerie & " ==="
+    
+    If Not Reconnecter() Then
+        Debug.Print "ERREUR: Pas de connexion BDD"
+        Exit Sub
+    End If
+    
+    ' Test 1: Vérifier NSE_DAT
+    Dim sql1 As String
+    sql1 = "SELECT NSE_NUMS, ART_CODE, STK_NoSU FROM NSE_DAT WHERE NSE_NUMS = '" & numeroSerie & "' AND ACT_CODE = 'RB'"
+    
+    Dim rs1 As ADODB.Recordset
+    Set rs1 = New ADODB.Recordset
+    rs1.Open sql1, conn
+    
+    If Not rs1.EOF Then
+        Debug.Print "NSE_DAT trouvé:"
+        Debug.Print "  ART_CODE: " & rs1!ART_CODE
+        Debug.Print "  STK_NoSU: " & rs1!STK_NoSU & " (Type: " & TypeName(rs1!STK_NoSU) & ")"
+        
+        Dim artCode As String, stkNoSU As String
+        artCode = rs1!ART_CODE
+        stkNoSU = CStr(rs1!STK_NoSU)
+        
+        rs1.Close
+        
+        ' Test 2: Chercher dans REL_DAT
+        Dim sql2 As String
+        sql2 = "SELECT REE_NORE, REL_NoSU FROM REL_DAT WHERE ACT_CODE = 'RB' AND ART_CODE = '" & artCode & "'"
+        
+        Dim rs2 As ADODB.Recordset
+        Set rs2 = New ADODB.Recordset
+        rs2.Open sql2, conn
+        
+        Debug.Print "REL_DAT pour ART_CODE " & artCode & ":"
+        Do While Not rs2.EOF
+            Debug.Print "  REL_NoSU: " & rs2!REL_NoSU & " (Type: " & TypeName(rs2!REL_NoSU) & ") - REE_NORE: " & IIf(IsNull(rs2!REE_NORE), "NULL", rs2!REE_NORE)
+            
+            ' Tester la correspondance
+            If CStr(rs2!REL_NoSU) = stkNoSU Then
+                Debug.Print "    *** CORRESPONDANCE TROUVÉE ! ***"
+                If Not IsNull(rs2!REE_NORE) Then
+                    Debug.Print "    REE_NORE: " & rs2!REE_NORE
+                Else
+                    Debug.Print "    REE_NORE est NULL"
+                End If
+            End If
+            
+            rs2.MoveNext
+        Loop
+        rs2.Close
+        
+        ' Test 3: Exécuter votre requête exacte
+        Debug.Print "Test avec votre requête exacte:"
+        Dim resultat As TypeDonneesREE
+        resultat = RecupererNumeroReceptionCorrect(numeroSerie)
+        
+        If resultat.trouve Then
+            Debug.Print "  SUCCÈS: REE_NORE = " & resultat.numeroReception
+        Else
+            Debug.Print "  ÉCHEC: " & resultat.messageErreur
+        End If
+        
+    Else
+        Debug.Print "AUCUN ENREGISTREMENT dans NSE_DAT pour " & numeroSerie
+        rs1.Close
+    End If
+    
+    Set rs1 = Nothing
+    Set rs2 = Nothing
+    
+    Debug.Print "=== FIN DIAGNOSTIC ==="
+    Exit Sub
+    
+ErrorHandler:
+    Debug.Print "ERREUR DIAGNOSTIC: " & Err.description
+End Sub
